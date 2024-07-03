@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Me - Nicholi Caron</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #2C2B2A;
+            --accent-color: #B57EDC;
+            --text-color: #F5F1ED;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.5rem;
+            color: var(--accent-color);
+        }
+        .profile-image {
+            width: 100%;
+            max-width: 400px;
+            height: auto;
+            border-radius: 10px;
+            margin: 2rem 0;
+        }
+        p {
+            margin-bottom: 1.5rem;
+        }
+        strong {
+            color: var(--accent-color);
+        }
+        .dropdown {
+            margin-top: 2rem;
+            border: 1px solid var(--accent-color);
+            border-radius: 5px;
+        }
+        .dropdown-toggle {
+            background-color: var(--accent-color);
+            color: var(--bg-color);
+            padding: 1rem;
+            cursor: pointer;
+            border: none;
+            width: 100%;
+            text-align: left;
+            font-size: 1rem;
+            font-weight: bold;
+        }
+        .dropdown-content {
+            display: none;
+            padding: 1rem;
+            white-space: pre-line;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>About Me</h1>
+        
+        <img src="assets/images/vectorized_pfp.png" alt="A vectorized portrait of me" class="profile-image">
+        
+        <p>Whoami? Tl;dr: My name is Nicholi Caron and I'm an enterprising 20-something – searching for myself, a righteous cause, and a job I'll love. Both a <strong>child of the millennium</strong>, and a <strong>friend of the electron.</strong></p>
+
+        <p>I'm a mostly self-taught guy who wants to work on cool technologies. I'm driven by the prospect of architecting the digital infrastructure of the future. I believe that AI has brought us to the highest leverage point in history; today, one person can do what it would have taken dozens to just decades ago. Steve Jobs once said that the personal computer is a bicycle for the mind. A modern continuation of that metaphor would be that AI is performance enhancing drugs. <strong>Even the average Joe can become Lance Armstrong.</strong></p>
+
+        <p>I intend to use this site as a public notepad – documenting the projects I work on, the books I read, and the musings I have along life's journey. One of the most important skills to have as an engineer is the ability to write – effective communication is just as important as the ideas that one communicates. Additionally, I think teaching others is the best way to teach yourself. So let's buckle in and get this show on the road.</p>
+
+        <div class="dropdown">
+            <button class="dropdown-toggle" onclick="toggleDropdown()">Go All The Way - A Poem By Charles Bukowski</button>
+            <div class="dropdown-content" id="poem">
+If you're going to try, go all the way.
+Otherwise, don't even start.
+If you're going to try, go all the way. 
+This could mean losing girlfriends, wives, relatives, jobs and maybe even your mind.
+It could mean not eating for three or four days. 
+It could mean freezing on a park bench.
+It could mean jail. 
+It could mean derision, mockery, isolation.
+Isolation is the gift.
+All the others are a test of your endurance, of how much you really want to do it. 
+And, you'll do it, despite rejection and the worst odds.
+And it will be better than anything else you can imagine.
+If you're going to try, go all the way. 
+There is no other feeling like that.
+You will be alone with the gods, and the nights will flame with fire.
+DO IT. DO IT. DO IT. All the way
+You will ride life straight to perfect laughter. 
+It's the only good fight there is.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleDropdown() {
+            var content = document.getElementById("poem");
+            if (content.style.display === "block") {
+                content.style.display = "none";
+            } else {
+                content.style.display = "block";
+            }
+        }
+    </script>
+</body>
+</html>

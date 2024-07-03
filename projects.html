@@ -1,0 +1,131 @@
+---
+layout: default
+title: Projects
+---
+
+<div class="container">
+    <h1>My Projects</h1>
+    
+    <p>Here you can find an overview of my projects. For more detailed information and source code, check out my <a href="https://github.com/nicholicaron" target="_blank" rel="noopener noreferrer">GitHub profile</a>.</p>
+
+    <div class="github-stats">
+        <img src="https://github-readme-stats.vercel.app/api?username=nicholicaron&show_icons=true&theme=radical" alt="GitHub Stats" />
+        <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=nicholicaron&layout=compact&theme=radical" alt="Top Languages" />
+    </div>
+
+    <div class="projects-grid">
+        {% for post in site.tags.project %}
+            <div class="project-card">
+                <img src="{{ post.cover_image | default: '/assets/images/default-project-image.jpg' }}" alt="{{ post.title }}" class="project-image">
+                <div class="project-info">
+                    <h2><a href="{{ post.url }}">{{ post.title }}</a></h2>
+                    <p>{{ post.excerpt | strip_html | truncatewords: 30 }}</p>
+                    <div class="project-tags">
+                        {% for tag in post.tags %}
+                            {% if tag != "project" %}
+                                <span class="tag">{{ tag }}</span>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+    :root {
+        --bg-color: #2C2B2A;
+        --accent-color: #B57EDC;
+        --text-color: #F5F1ED;
+        --card-bg-color: rgba(44, 43, 42, 0.8);
+    }
+    body {
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        font-family: 'Inter', sans-serif;
+    }
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
+    h1 {
+        font-family: 'Poppins', sans-serif;
+        font-size: 3.5rem;
+        color: var(--accent-color);
+        margin-bottom: 1rem;
+        text-align: center;
+    }
+    p {
+        margin-bottom: 2rem;
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+    a {
+        color: var(--accent-color);
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+    a:hover {
+        color: #9945FF;
+    }
+    .github-stats {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin-bottom: 3rem;
+        flex-wrap: wrap;
+    }
+    .github-stats img {
+        max-width: 100%;
+        height: auto;
+    }
+    .projects-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 2rem;
+    }
+    .project-card {
+        background-color: var(--card-bg-color);
+        border-radius: 10px;
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border: 1px solid rgba(181, 126, 220, 0.2);
+    }
+    .project-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(181, 126, 220, 0.2);
+    }
+    .project-image {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+    }
+    .project-info {
+        padding: 1.5rem;
+    }
+    .project-info h2 {
+        font-family: 'Poppins', sans-serif;
+        font-size: 1.5rem;
+        margin-top: 0;
+        margin-bottom: 1rem;
+    }
+    .project-info p {
+        font-size: 1rem;
+        color: #ccc;
+        margin-bottom: 1rem;
+    }
+    .project-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+    .tag {
+        background: var(--accent-color);
+        color: var(--bg-color);
+        padding: 0.2rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+    }
+</style>

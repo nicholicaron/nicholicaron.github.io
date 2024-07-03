@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nicholi's Intellectual Odyssey</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #2C2B2A;
+            --accent-color: #B57EDC;
+            --text-color: #F5F1ED;
+            --graph-color: #808080;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            position: relative;
+            overflow-x: hidden;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 1;
+        }
+        header {
+            padding: 2rem 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            width: 50px;
+            height: 50px;
+        }
+        nav ul {
+            display: flex;
+            list-style: none;
+            padding: 0;
+        }
+        nav ul li {
+            margin-left: 2rem;
+        }
+        nav a {
+            color: var(--text-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        nav a:hover {
+            color: var(--accent-color);
+        }
+        .banner-container {
+            overflow: hidden;
+            white-space: nowrap;
+            padding: 10px 0;
+            background: rgba(255,255,255,0.05);
+        }
+        #flowing-banner {
+            display: inline-block;
+            padding-left: 100%;
+            animation: flow 40s linear infinite;
+        }
+        @keyframes flow {
+            0%   { transform: translate(0, 0); }
+            100% { transform: translate(-100%, 0); }
+        }
+        #flowing-banner a {
+            color: var(--text-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        #flowing-banner a:hover {
+            color: var(--accent-color);
+        }
+        .hero {
+            padding: 6rem 0;
+            text-align: center;
+        }
+        h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        .subheading {
+            font-size: 1.5rem;
+            max-width: 600px;
+            margin: 0 auto 3rem;
+        }
+        .cta-button {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: var(--bg-color);
+            padding: 0.8rem 2rem;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+        .cta-button:hover {
+            background-color: #9945FF;
+        }
+        .articles {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 4rem 0;
+        }
+        .article {
+            background-color: rgba(44, 43, 42, 0.8);
+            padding: 2rem;
+            border-radius: 10px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .article:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(181, 126, 220, 0.1);
+        }
+        .article h3 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.5rem;
+            margin-top: 0;
+        }
+        .article p {
+            font-size: 16px;
+            color: #ccc;
+        }
+        .cover-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+        .tags {
+            margin-top: 1rem;
+        }
+        .tag {
+            display: inline-block;
+            background: var(--accent-color);
+            color: var(--bg-color);
+            padding: 0.2rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            position: relative;
+            z-index: 1;
+        }
+        .social-icons {
+            margin-top: 1rem;
+        }
+        .social-icons a {
+            color: var(--text-color);
+            font-size: 1.5rem;
+            margin: 0 0.5rem;
+            transition: color 0.3s ease;
+        }
+        .social-icons a:hover {
+            color: var(--accent-color);
+        }
+        .background-graph {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            overflow: hidden;
+            z-index: 0;
+        }
+        .background-graph svg {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200%;
+            height: 200%;
+        }
+    </style>
+</head>
+<body>
+    <div class="background-graph">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2000 2000">
+            <defs>
+                <marker id="dot" viewBox="0 0 20 20" refX="10" refY="10" markerWidth="10" markerHeight="10">
+                    <circle cx="10" cy="10" r="6" fill="var(--graph-color)" />
+                </marker>
+            </defs>
+            <g opacity="0.15">
+                <line x1="100" y1="100" x2="500" y2="300" stroke="var(--graph-color)" stroke-width="2" marker-end="url(#dot)" marker-start="url(#dot)" />
+                <line x1="500" y1="300" x2="900" y2="700" stroke="var(--graph-color)" stroke-width="2" marker-end="url(#dot)" />
+                <line x1="900" y1="700" x2="1300" y2="500" stroke="var(--graph-color)" stroke-width="2" marker-end="url(#dot)" />
+                <line x1="1300" y1="500" x2="1700" y2="900" stroke="var(--graph-color)" stroke-width="2" marker-end="url(#dot)" />
+                <line x1="100" y1="900" x2="500" y2="1300" stroke="var(--graph-color)" stroke-width="2" marker-end="url(#dot)" marker-start="url(#dot)" />
+                <line x1="500" y1="1300" x2="900" y2="1700" stroke="var(--graph-color)" stroke-width="2" marker-end="url(#dot)" />
+                <line x1="900" y1="1700" x2="1300" y2="1900" stroke="var(--graph-color)" stroke-width="2" marker-end="url(#dot)" />
+                <line x1="1300" y1="1900" x2="1700" y2="1500" stroke="var(--graph-color)" stroke-width="2" marker-end="url(#dot)" />
+                <line x1="300" y1="500" x2="700" y2="900" stroke="var(--graph-color)" stroke-width="2" marker-end="url(#dot)" marker-start="url(#dot)" />
+                <line x1="700" y1="900" x2="1100" y2="1300" stroke="var(--graph-color)" stroke-width="2" marker-end="url(#dot)" />
+                <line x1="1100" y1="1300" x2="1500" y2="1100" stroke="var(--graph-color)" stroke-width="2" marker-end="url(#dot)" />
+                <line x1="1500" y1="1100" x2="1900" y2="1500" stroke="var(--graph-color)" stroke-width="2" marker-end="url(#dot)" />
+                <line x1="300" y1="1500" x2="700" y2="1100" stroke="var(--graph-color)" stroke-width="2" marker-end="url(#dot)" marker-start="url(#dot)" />
+                <line x1="700" y1="1100" x2="1100" y2="700" stroke="var(--graph-color)" stroke-width="2" marker-end="url(#dot)" />
+                <line x1="1100" y1="700" x2="1500" y2="300" stroke="var(--graph-color)" stroke-width="2" marker-end="url(#dot)" />
+                <line x1="1500" y1="300" x2="1900" y2="700" stroke="var(--graph-color)" stroke-width="2" marker-end="url(#dot)" />
+            </g>
+        </svg>
+    </div>
+
+    <div class="container">
+        <header>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+                <path d="M20 50 Q35 20 50 50 T80 50" fill="none" stroke="#b57edc" stroke-width="2"/>
+                <circle cx="20" cy="50" r="3" fill="#ffffff"/>
+                <circle cx="50" cy="50" r="3" fill="#ffffff"/>
+                <circle cx="80" cy="50" r="3" fill="#ffffff"/>
+            </svg>
+            <nav>
+                <ul>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#resume">Resume</a></li>
+                    <li><a href="#topics">Topics</a></li>
+                    <li><a href="#projects">Projects</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+        </header>
+        
+        <div class="banner-container">
+            <div id="flowing-banner">
+                <a href="https://www.neumann-labs.com" target="_blank">CEO @ Neumann Labs</a> &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+                <a href="https://www.killdevilsecurity.com/" target="_blank">Chief Engineer @ Kill Devil Security</a> &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+                <a href="https://theta.limited/" target="_blank">Machine Learning Engineer @ Theta Informatics</a> &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+                <a href="https://www.wplastics.com/" target="_blank">Software Engineer (Frontend/MLOps) @ Western Plastics Inc.</a> &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+                <a href="https://research.kennesaw.edu/our/first-year-scholars/program.php" target="_blank">Machine Learning Research Intern @ Kennesaw State University</a> &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+                <a href="https://gtri.gatech.edu/" target="_blank">Research Intern Fellow @ Georgia Institute of Technology</a> &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+            </div>
+        </div>
+
+        <main>
+            <section class="hero">
+                <h1>Nicholi's Intellectual Odyssey</h1>
+                <p class="subheading">I’m driven by the prospect of architecting the digital infrastructure of the future. Lately I've been delving into compressed sensing, computer vision, multi-agent coordination, ML compilers, ML infrastructure and resource constrained deployment of AI models</p>
+                <a href="mailto:nicholicaron@gmail.com" class="cta-button">Get in Touch</a>
+            </section>
+            
+            <section class="articles">
+                <div class="article">
+                    <img src="https://via.placeholder.com/300x200.png?text=Neural+Networks" alt="Understanding Neural Networks" class="cover-image">
+                    <h3>Understanding Neural Networks: A Deep Dive</h3>
+                    <p>Explore the fundamentals of neural networks and how they're revolutionizing the field of artificial intelligence...</p>
+                    <div class="tags">
+                        <span class="tag">AI</span>
+                        <span class="tag">Machine Learning</span>
+                        <span class="tag">Neural Networks</span>
+                    </div>
+                </div>
+                <div class="article">
+                    <img src="https://via.placeholder.com/300x200.png?text=Quantum+Computing" alt="Quantum Computing Breakthroughs" class="cover-image">
+                    <h3>Recent Breakthroughs in Quantum Computing</h3>
+                    <p>Discover the latest advancements in quantum computing and their potential impact on various industries...</p>
+                    <div class="tags">
+                        <span class="tag">Quantum Computing</span>
+                        <span class="tag">Technology</span>
+                    </div>
+                </div>
+                <div class="article">
+                    <img src="https://via.placeholder.com/300x200.png?text=AI+Ethics" alt="AI Ethics" class="cover-image">
+                    <h3>The Ethics of AI: Navigating the Gray Areas</h3>
+                    <p>Exploring the ethical considerations in AI development and deployment...</p>
+                    <div class="tags">
+                        <span class="tag">AI</span>
+                        <span class="tag">Ethics</span>
+                    </div>
+                </div>
+            </section>
+        </main>
+        
+        <footer>
+            <p>&copy; 2024 Nicholi Caron's Tech Hub. All rights reserved.</p>
+            <div class="social-icons">
+                <a href="#" aria-label="Twitter">🐦</a>
+                <a href="#" aria-label="LinkedIn">💼</a>
+                <a href="#" aria-label="GitHub">🐙</a>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>
+        

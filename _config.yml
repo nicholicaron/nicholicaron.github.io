@@ -1,0 +1,55 @@
+# Site settings
+title: Nicholi's Intellectual Odyssey
+email: nicholicaron@gmail.com
+description: >- # this means to ignore newlines until "baseurl:"
+  Exploring compressed sensing, computer vision, multi-agent coordination, 
+  ML compilers, and resource constrained deployment of AI models
+baseurl: "" # the subpath of your site, e.g. /blog
+url: "" # the base hostname & protocol for your site, e.g. http://example.com
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+
+# Permalink style
+permalink: /:categories/:year/:month/:day/:title:output_ext
+
+# Exclude from processing
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor/bundle/
+  - vendor/cache/
+  - vendor/gems/
+  - vendor/ruby/
+
+# Plugins
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+  - Jekyll-paginate
+  - jekyll-relative-links
+
+# Default front matter
+defaults:
+  -
+    scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "post"
+      author: "Nicholi Caron"
+
+# Sass settings
+sass:
+  style: compressed
+
+# Collections
+collections:
+  projects:
+    output: true
+
+# Pagination
+paginate: 5
+paginate_path: "/blog/page:num/"
