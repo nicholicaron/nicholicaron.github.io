@@ -1,0 +1,5 @@
+I recently came across an awesome book titled "Understanding Deep Learning". It is the best single resource I've personally come across for the topics – covering everything from basic Deep Learning fundamentals to moderately advanced topics such as GNNs GANs and Diffusion Models. I personally find it quite accessible, though it may assume a decent mathematical background.
+
+The book comes accompanied with awesome Jupyter Notebooks containing code exercises as well as a partial solution set. However, this solution set is a bit sparse. So I decided to attempt to create my own comprehensive solution set. The intent is to provide myself with some external motivation to actually finish this soon. At the time of writing, I am only on Chapter 7, but I will continue to update as I make more progress.
+
+The PDF is too large to upload at the moment, so here's a google drive link. Scroll below to view the document in this webpage. 
