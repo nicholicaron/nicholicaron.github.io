@@ -91,7 +91,106 @@ And for JIT compilers, the stakes are even higher:
 
 The compilation process can be broken down into stages, each responsible for a specific transformation of the source code. At a high level, a compiler takes human-readable source code and transforms it into machine code that can be executed by a processor.
 
-![Compiler structure](/assets/images/compilers/intro/compiler_structure-3.png){: .post-image }
+<div style="overflow-x: auto; margin: 2rem 0;">
+<svg viewBox="0 0 880 320" width="880" height="320" xmlns="http://www.w3.org/2000/svg" style="display: block; margin: 0 auto; font-family: 'JetBrains Mono', monospace; max-width: 100%;">
+  <!-- Phase group backgrounds -->
+  <!-- Front End -->
+  <rect x="20" y="20" width="280" height="280" rx="6" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="6 3" opacity="0.3"/>
+  <text x="160" y="48" text-anchor="middle" fill="currentColor" font-size="11" font-weight="600" letter-spacing="0.1em" opacity="0.5">FRONT END</text>
+  <!-- Optimizer -->
+  <rect x="320" y="20" width="200" height="280" rx="6" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="6 3" opacity="0.3"/>
+  <text x="420" y="48" text-anchor="middle" fill="currentColor" font-size="11" font-weight="600" letter-spacing="0.1em" opacity="0.5">OPTIMIZER</text>
+  <!-- Back End -->
+  <rect x="540" y="20" width="320" height="280" rx="6" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="6 3" opacity="0.3"/>
+  <text x="700" y="48" text-anchor="middle" fill="currentColor" font-size="11" font-weight="600" letter-spacing="0.1em" opacity="0.5">BACK END</text>
+
+  <!-- Source Code input -->
+  <rect x="40" y="80" width="80" height="44" rx="4" fill="none" stroke="currentColor" stroke-width="1.5"/>
+  <text x="80" y="100" text-anchor="middle" fill="currentColor" font-size="9">Source</text>
+  <text x="80" y="113" text-anchor="middle" fill="currentColor" font-size="9">Code</text>
+
+  <!-- Scanner -->
+  <rect x="40" y="155" width="80" height="36" rx="4" fill="none" stroke="currentColor" stroke-width="1.5"/>
+  <text x="80" y="178" text-anchor="middle" fill="currentColor" font-size="10">Scanner</text>
+  <line x1="80" y1="124" x2="80" y2="155" stroke="currentColor" stroke-width="1.2" marker-end="url(#ah-comp)"/>
+
+  <!-- Parser -->
+  <rect x="140" y="155" width="80" height="36" rx="4" fill="none" stroke="currentColor" stroke-width="1.5"/>
+  <text x="180" y="178" text-anchor="middle" fill="currentColor" font-size="10">Parser</text>
+  <line x1="120" y1="173" x2="140" y2="173" stroke="currentColor" stroke-width="1.2" marker-end="url(#ah-comp)"/>
+
+  <!-- Elaborator -->
+  <rect x="100" y="220" width="120" height="36" rx="4" fill="none" stroke="currentColor" stroke-width="1.5"/>
+  <text x="160" y="243" text-anchor="middle" fill="currentColor" font-size="10">Elaborator</text>
+  <line x1="160" y1="191" x2="160" y2="220" stroke="currentColor" stroke-width="1.2" marker-end="url(#ah-comp)"/>
+
+  <!-- IR label between front end and optimizer -->
+  <rect x="235" y="225" width="40" height="26" rx="12" fill="none" stroke="currentColor" stroke-width="1.2" opacity="0.6"/>
+  <text x="255" y="243" text-anchor="middle" fill="currentColor" font-size="10" font-weight="500" opacity="0.7">IR</text>
+  <line x1="220" y1="238" x2="235" y2="238" stroke="currentColor" stroke-width="1.2" marker-end="url(#ah-comp)"/>
+
+  <!-- Optimizer sub-components -->
+  <rect x="340" y="110" width="160" height="36" rx="4" fill="none" stroke="currentColor" stroke-width="1.5"/>
+  <text x="420" y="133" text-anchor="middle" fill="currentColor" font-size="9">Data-flow Analysis</text>
+
+  <rect x="340" y="165" width="160" height="36" rx="4" fill="none" stroke="currentColor" stroke-width="1.5"/>
+  <text x="420" y="188" text-anchor="middle" fill="currentColor" font-size="9">Control-flow Analysis</text>
+
+  <rect x="340" y="220" width="160" height="36" rx="4" fill="none" stroke="currentColor" stroke-width="1.5"/>
+  <text x="420" y="243" text-anchor="middle" fill="currentColor" font-size="9">Dependence Analysis</text>
+
+  <!-- Arrows between optimizer stages -->
+  <line x1="420" y1="146" x2="420" y2="165" stroke="currentColor" stroke-width="1.2" marker-end="url(#ah-comp)"/>
+  <line x1="420" y1="201" x2="420" y2="220" stroke="currentColor" stroke-width="1.2" marker-end="url(#ah-comp)"/>
+
+  <!-- Connect front end IR to optimizer -->
+  <line x1="275" y1="238" x2="340" y2="238" stroke="currentColor" stroke-width="1.2"/>
+  <line x1="275" y1="238" x2="275" y2="128" stroke="currentColor" stroke-width="1.2"/>
+  <line x1="275" y1="128" x2="340" y2="128" stroke="currentColor" stroke-width="1.2" marker-end="url(#ah-comp)"/>
+
+  <!-- IR label between optimizer and back end -->
+  <rect x="510" y="225" width="40" height="26" rx="12" fill="none" stroke="currentColor" stroke-width="1.2" opacity="0.6"/>
+  <text x="530" y="243" text-anchor="middle" fill="currentColor" font-size="10" font-weight="500" opacity="0.7">IR</text>
+  <line x1="500" y1="238" x2="510" y2="238" stroke="currentColor" stroke-width="1.2" marker-end="url(#ah-comp)"/>
+
+  <!-- Back End sub-components -->
+  <rect x="560" y="110" width="140" height="36" rx="4" fill="none" stroke="currentColor" stroke-width="1.5"/>
+  <text x="630" y="128" text-anchor="middle" fill="currentColor" font-size="9">Instruction</text>
+  <text x="630" y="140" text-anchor="middle" fill="currentColor" font-size="9">Selector</text>
+
+  <rect x="560" y="165" width="140" height="36" rx="4" fill="none" stroke="currentColor" stroke-width="1.5"/>
+  <text x="630" y="183" text-anchor="middle" fill="currentColor" font-size="9">Register</text>
+  <text x="630" y="195" text-anchor="middle" fill="currentColor" font-size="9">Allocator</text>
+
+  <rect x="560" y="220" width="140" height="36" rx="4" fill="none" stroke="currentColor" stroke-width="1.5"/>
+  <text x="630" y="238" text-anchor="middle" fill="currentColor" font-size="9">Instruction</text>
+  <text x="630" y="250" text-anchor="middle" fill="currentColor" font-size="9">Scheduler</text>
+
+  <!-- Arrows between back end stages -->
+  <line x1="630" y1="146" x2="630" y2="165" stroke="currentColor" stroke-width="1.2" marker-end="url(#ah-comp)"/>
+  <line x1="630" y1="201" x2="630" y2="220" stroke="currentColor" stroke-width="1.2" marker-end="url(#ah-comp)"/>
+
+  <!-- Connect optimizer IR to back end -->
+  <line x1="550" y1="238" x2="550" y2="128" stroke="currentColor" stroke-width="1.2"/>
+  <line x1="550" y1="128" x2="560" y2="128" stroke="currentColor" stroke-width="1.2" marker-end="url(#ah-comp)"/>
+
+  <!-- Output: Target ISA -->
+  <rect x="740" y="165" width="100" height="44" rx="4" fill="none" stroke="currentColor" stroke-width="1.5"/>
+  <text x="790" y="185" text-anchor="middle" fill="currentColor" font-size="9">Target</text>
+  <text x="790" y="198" text-anchor="middle" fill="currentColor" font-size="9">Machine Code</text>
+  <line x1="700" y1="238" x2="730" y2="238" stroke="currentColor" stroke-width="1.2"/>
+  <line x1="730" y1="238" x2="730" y2="187" stroke="currentColor" stroke-width="1.2"/>
+  <line x1="730" y1="187" x2="740" y2="187" stroke="currentColor" stroke-width="1.2" marker-end="url(#ah-comp)"/>
+
+  <!-- Arrowhead -->
+  <defs>
+    <marker id="ah-comp" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="currentColor"/>
+    </marker>
+  </defs>
+</svg>
+</div>
+<p style="text-align: center; font-style: italic; color: var(--on-surface-variant); font-size: 0.9rem; margin-top: -0.5rem;">The three-stage compiler pipeline: Front End (source → IR), Optimizer (IR → IR), Back End (IR → target ISA).</p>
 
 ### Front End: Source → IR
 
