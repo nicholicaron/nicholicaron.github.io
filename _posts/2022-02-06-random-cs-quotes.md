@@ -1,41 +1,56 @@
+---
+layout: post
+title: "Miscellaneous CS Quotes"
+date: 2022-02-06
+tags: [Quotes, Computer Science]
+cover_image: /assets/images/random_cs/chip.jpg
+---
 
+An amalgamation of neat computer-related quotes I've collected over time. From textbooks, talks, and blog posts buried deep in Hacker News threads.
 
-    "There are only two hard things in Computer Science: cache invalidation, naming things, and off-by-one errors" - Phil Karlton
+---
 
-    "A distributed system is one in which the failure of a computer you didn't even know existed can render your own computer unusable" - Leslie Lamport
+> "There are only two hard things in Computer Science: cache invalidation, naming things, and off-by-one errors"
+> --- Phil Karlton
 
-    "Bad programmers worry about the code. Good programmers worry about data structures and their relationships." - Linus Torvalds
+> "Software can be permanent . . . Software's duality as both information and machine afford a timeless perfection and utility that stand apart from any human endeavor . . . Among current languages, only Rust seems to share this aspiration for permanence, with a perspective that is decidedly larger than itself."
+> --- Bryan Cantrill
 
-    "The best way to prepare as a programmer is to write programs, and to study great programs that other people have written... You've got to be willing to read other people's code, then have other people review your code. You've got to want to be in this incredible feedback loop where you get the world-class people to tell you what you're doing wrong" - Bill Gates
+> "Every computer program is a model, hatched in the mind, of a real or mental process. These processes, arising from human experience and thought, are huge in number, intricate in detail, and at any time only partially understood. They are modeled to our permanent satisfaction rarely by our computer programs."
+> --- Alan J. Perlis
 
-    "Programing is the act of turning an inexact descrption of something (the specification) into an exact description of the thing (the program)" - Joe Armstrong
+> "A distributed system is one in which the failure of a computer you didn't even know existed can render your own computer unusable"
+> --- Leslie Lamport
 
-    "A most important, but also elusive, aspect of any tool is its influence on the habits of those who train themselves in its use. If the tool is a programming language this influence is, whether we like it or not, an influence on our thinking habits ... A programming language is a tool that has profound influence on our thinking habits." - Edsger Dijkstra
+> "The best teacher I had in graduate school spent the whole semester destroying any beliefs we had about computing. He was a real iconoclast. He happened to be a genius, so we took it. At the end of the course, we were free because we didn't believe in anything. We had to learn everything, but he destroyed it. He wanted us to understand what had been done, but he didn't want us to believe in it."
+> --- Alan Kay
 
-    "It is not a language's weakness but its strengths that control the gradient of its change: Alas, a language never escapes its embryonic sac" - Alan Perlis
+> "The real hero of programming is the one who writes negative code."
+> --- Doug McIlroy
 
-    "They know enough who know how to learn" - J. Adams
+> "It is my purpose to transmit the importance of good taste and style in programming, but the specific elements of style presented serve only to illustrate what benefits can be derived from 'style' in general. In this respect I feel akin to the teacher of composition at a conservatory: He does not teach his pupils how to compose a particular symphony, he must help his pupils to find their own style and must explain to them what is implied by this."
+> --- Edsger Dijkstra
 
-    "All programmers are playwrights and all computers are lousy actors." - Anonymous
+> "It is not a language's weakness but its strengths that control the gradient of its change: Alas, a language never escapes its embryonic sac."
+> --- Alan Perlis
 
-    "The sooner you start to code, the longer the program will take." - R. Carlson
+> "At its best, starting a startup is merely an ulterior motive for curiosity. And you'll do it best if you introduce the ulterior motive toward the end of the process. So here is the ultimate advice for young would-be startup founders, boiled down to two words: just learn"
+> --- Paul Graham
 
-    "The trick is to pick the features that don't fight each other." - John Carmack
+> "And you're right: we were not out to win over the Lisp programmers; we were after the C++ programmers. We managed to drag a lot of them about halfway to Lisp. Aren't you happy?"
+> --- Guy Steele (about Java)
 
-    “Program testing can be a very effective way to show the presence of bugs, but it is hopelessly inadequate for showing their absence.” - Edsger Dijkstra
+> "We should have some ways of connecting programs like garden hose --- screw in another segment when it becomes necessary to massage data in another way. This is the way of IO also."
+> --- Doug McIlroy
 
-    "... our intellectual powers are rather geared to master static relations and that our powers to visualize processes evolving in time are relatively poorly developed. For that reason we should do (as wise programmers aware of our limitations) our utmost to shorten the conceptual gap between the static program and the dynamic process, to make the correspondence between the program (spread out in text space) and the process (spread out in time) as trivial as possible." - Edsger Dijkstra
+> "Branch-free code is favored, because on many computers, branches slow down instruction fetching and inhibit executing instructions in parallel."
+> --- H.S. Warren
 
-    "Simplificity is prerequisite for reliability" - Edsger Dijkstra
+> "The best way to prepare as a programmer is to write programs, and to study great programs that other people have written . . . You've got to be willing to read other people's code, then have other people review your code."
+> --- Bill Gates
 
-    "Precise language is not the problem. Clear language is the problem" - Richard Feynman
+> "Programming is the act of turning an inexact description of something (the specification) into an exact description of the thing (the program)"
+> --- Joe Armstrong
 
-    " A really good language should be both clean and dirty: cleanly designed, with a small core of well understood and highly orthogonal operators, but dirty in the sense that it lets hackers have their way with it ... A real hacker's language will always have a slightly raffish character." - Paul Graham
-
-    "Premature optimization is the root of all evil in programing" - Tony Hoare
-
-    " A C program is like a fast dance on a newly waxed dance floor by people carrying razors" - Waldi Ravens
-
-    "To iterate is human, to recurse [is] divine" - Peter Deutsch
-
-    "Every computer program is a model, hatched in the mind, of a real or mental process. These processes, arising from human experience and thought, are huge in number, intricate in detail, and at any time only partially understood. They are modeled to our permanent satisfaction rarely by our computer programs. Thus even though our programs are carefully handcrafted discrete collections of symbols, mosaics of interlocking functions, they continually evolve: we change them as our perception of the model deepens, enlarges, generalizes until the model ultimately attains a meta-stable place within still another model with which we struggle." - Alan Perlis
+> "Image is fragile, skills last forever"
+> --- George Hotz

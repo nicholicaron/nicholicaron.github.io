@@ -1,13 +1,25 @@
-# On the Decomposition of Square Matrices
+---
+layout: post
+title: "On the Decomposition of Square Matrices"
+date: 2022-02-07
+tags: [Math, Linear Algebra]
+cover_image: /assets/images/matrix_decomp/honors_proj_ss-1.png
+---
 
-### An extracurricular paper I wrote for an introductory Linear Algebra course. Matrix decompositions are invaluable tools for compression, which can have extraordinary consequences.
+An extracurricular paper I wrote for an introductory Linear Algebra course. Matrix decompositions are among the most powerful tools in applied mathematics — they reveal the hidden structure of linear transformations and make otherwise intractable computations feasible.
 
-**NEED TO ADD BANNER**
-## The Signal and the Noise
-The idea that complex systems often contain dominant low-dimensional patterns is a very powerful one. Extracting this underlying 'signal' from the noise is extremely valuable. Matrix decompositions provide methods to compress the information within tabular data, giving rise to efficient sensing, compact representations for modeling and control, and machine learning. Some, such as Marcus Hutter, believe that **[compression is intelligence](http://mattmahoney.net/dc/rationale.html)**.
+This paper surveys the major decomposition techniques for square matrices, with a focus on building intuition for when and why each decomposition is useful.
 
-Abstract: This paper provides a brief overview of some of the requirements, computational procedures, benefits and applications of the decomposition (i.e. factorization) of square matrices into the products of several simpler matrices. Some of the factorizations discussed are LU decomposition, Symmetric Eigenvalue decomposition, Jordan decomposition, and the Singular Value Decomposition. An important takeaway is that these decompositions are related by their form with progressively demanding requirements and constructions.
+## Decompositions Covered
 
-> "In the language of Computer Science, the expression of [a matrix] A as a product amounts to a pre-processing of the data in A, organizing that data into two or more parts whose structures are more useful in some way, perhaps more accessible for computation" - David C. Lay
+- **LU Decomposition** — Gaussian elimination as matrix factorization. The workhorse of numerical linear algebra for solving systems of equations.
+- **QR Decomposition** — Orthogonal factorization via Gram-Schmidt, Householder reflections, or Givens rotations. Essential for least-squares problems and eigenvalue algorithms.
+- **Eigendecomposition** — Diagonalization of matrices with linearly independent eigenvectors. The bridge between linear algebra and dynamical systems.
+- **Singular Value Decomposition (SVD)** — The most general decomposition. Works for any matrix, reveals rank, range, and null space in a single factorization.
+- **Cholesky Decomposition** — The efficient special case for symmetric positive definite matrices. Half the work of LU, with better numerical stability.
 
-**Insert PDF Download and Screenshots**
+## Why Decompositions Matter
+
+Every time you train a neural network, compress an image, solve a differential equation, or run PCA on a dataset, you're relying on matrix decompositions. They are the computational backbone of modern scientific computing.
+
+**Reference:** The full paper is available as a [PDF download](/assets/pdfs/GHC_Honors_Nicholi-2.pdf).

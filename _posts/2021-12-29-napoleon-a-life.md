@@ -1,51 +1,77 @@
+---
+layout: post
+title: "Napoleon: A Life"
+date: 2021-12-29
+tags: [Quotes, History]
+cover_image: /assets/images/napoleon/NapoleonOnStHelena.jpg
+---
 
+Selected passages from *Napoleon: A Life* by Andrew Roberts. Napoleon > Caesar > Alexander.
 
-    "The reading of history very soon made me feel that I was capable of achieving as much as the men who are placed in the highest ranks of our annals"
+---
 
-    "His acceptance of the revolutionary principles of equality before the law, rational government, meritocracy, efficiency and aggressive nationalism fit in well with his ethos"
+> "The reading of history very soon made me feel that I was capable of achieving as much as the men who are placed in the highest ranks of our annals"
 
-    "His fathers early death may also in part explain Napoleon's own drive and boundless energy: he suspected, correctly that his own lifespan would be short."
+> "I was the poorest of my classmates, they had pocket money, I never had any. I was proud, I was careful not to show it . . . I didn't know how to play or smile like the others."
 
-    "[While he was in military school,] He ate only once a day at 3 p.m., thereby saving enough money from his officer's salary to send some home to his mother; the rest he spent on books. He changed his clothes once every eight days. He was determined to continue his exhaustive autodidactic reading program"
+> "His acceptance of the revolutionary principles of equality before the law, rational government, meritocracy, efficiency and aggressive nationalism fit in well with his ethos"
 
-    "I lived like a bear, in a little room, with my books for my only friends ... These were the joys and debaucheries of my youth." - Napoleon
+> "His father's early death may also in part explain Napoleon's own drive and boundless energy; he suspected, correctly, that his own lifespan would be short."
 
-    "For Napoleon there was no such thing as too much work."
+> "He ate only once a day at 3 p.m., thereby saving enough money from his officer's salary to send some home to his mother; the rest he spent on books. He changed his clothes once every eight days. He was determined to continue his exhaustive autodidactic reading program"
 
-    "You know my destiny lies in the hazard of combat, in glory or in death." - Napoleon
+> "Do you know how I managed? By never entering a café or going into society; by eating dry bread, and brushing my own clothes so that they might last the longer. I lived like a bear, in a little room, with my books for my only friends ... These were the joys and debaucheries of my youth."
 
-    "... but he captured the spirit of activity that Napoleon radiated, his confidence, his obsessive demand for information, which was to be a feature throughout his life, and his love of his wife."
+> "For Napoleon there was no such thing as too much work."
 
-    "Vaulting ambition can be a terrible thing, but if allied to great ability -- a protean energy, grand purpose, the gift of oratory, near-perfect recall, superb timing, inspiring leadership -- it can bring about extraordinary outcomes"
+> "I always found him at his post; when he needed a rest he lay on the ground wrapped in his cloak: he never left the batteries."
 
-    "Nothing is so important in war as an undivided command"
+> "You know that my destiny lies in the hazard of combat, in glory or in death."
 
-    "An aide-de-camp wrote of how much his staff 'admired the strength of mind and the facility with which he could take off or fix the whole force of his attention on whatever he pleased'"
+> "He read biographies of commanders who had fought there and had the courage to admit his ignorance when he didn't know something."
 
-    "Since the [Italian] campaign had begun a year earlier, Napoleon had crossed the Apennines, and the Alps, defeated a Sardinian army and no fewer that six Austrian armies ... All this he had done before his twenty-eigth birthday. Eighteen months earlier he had been an unknown, moody soldier writing essays on suicide"
+> "Vaulting ambition can be a terrible thing, but if allied to great ability --- a protean energy, grand purpose, the gift of oratory, near-perfect recall, superb timing, inspiring leadership --- it can bring about extraordinary outcomes"
 
-    "Napoleon taught ordinary people that they could make history, and convinced his followers they were taking part in an adventure, a pageant, an experiment, an epic whose splendor would draw the attention of posterity for centuries to come"
+> "Nothing is so important in war as an undivided command"
 
-    "Winning is not enough if one doesn't take advantage of success" - Napoleon
+> "Since the campaign had begun a year earlier, Napoleon had crossed the Apennines and the Alps, defeated a Sardinian army and no fewer than six Austrian armies, and killed, wounded or captured 120,000 Austrian soldiers. All this he has done before his twenty-eighth birthday. Eighteen months earlier he had been an unknown, moody soldier writing essays on suicide"
 
-    "Napoleon was a bonafide intellectual ... He championed science and socialized with astronomers... And he went nowhere without his large, well-thumbed travelling library."
+> "Napoleon taught ordinary people that they could make history, and convinced his followers they were taking part in an adventure, a pageant, an experiment, an epic whose splendor would draw the attention of posterity for centuries to come"
 
-    "Europe is watching you. You have a great destiny to fulfill, battles to fight, dangers and hardships to overcome. You hold in your hands the future prosperity of France, the good of mankind, and your own glory." - Napoleon [To his Mediterranean army before invading Egypt]
+> "Napoleon learned many essential leadership lessons from Julius Caesar, especially his practice of admonishing troops he considered to have fallen below expectations"
 
-    "Everything passes rapidly on Earth, with the exception of the mark we leave on history" -Napoleon
+> "Winning is not enough if one doesn't take advantage of success"
+> --- Napoleon
 
-    "Napoleon was excellent at prioritization, dealing immediately with urgent matters, placing important but not urgent papers in a stack to be dealth with afterwards, and throwing anything he considered unimportant onto the floor."
+> "Napoleon was a bonafide intellectual . . . He championed science and socialized with astronomers; . . . And he went nowhere without his large, well-thumbed traveling library."
 
-    "To live is to suffer, and a human being who is worthy of honor must always struggle for mastery of self." -Napoleon
+To his Mediterranean army before invading Egypt:
 
-    "More battles are lost by loss of hope than loss of blood" -Napoleon
+> "Europe is watching you. You have a great destiny to fulfill, battles to fight, dangers and hardships to overcome. You hold in your hands the future prosperity of France, the good of mankind, and your own glory."
 
-    "Posterity would never have seen the measure of your spirit if it had not seen it in misfortune" - Mole [in a letter to Napoleon, March 1813]
+> "The fate of a battle is the result of a single instant --- a thought, the decisive moment comes, a moral spark is lit, and the smallest reserve accomplishes victory."
+> --- Napoleon
 
-    "Public opinion is an invisible, mysterious, irresistible power. Nothing is more mobile, nothing more vague, nothing stronger. Capricious though it is, nevertheless it is truthful, reasonable, and right much more often than one might think" - Napoleon
+> "For all his military genius, intellectual capacity, administrative ability and plain hard work, one should not underestimate the part that sheer good luck played in Napoleon's career."
 
-    "Other than on the battlefield itself, it was here [in the conseil d'etat] that Napoleon was at his most impressive. His councillors bear uniform witness -- whether they later supported or abandoned him, whether they were writing contemporaneously or long after his fall -- to his deliberative powers, his dynamism, the speed with which he grasped a subject, and the tenacity never to let it go until he had mastered its essentials and taken the necessary decision ... 'A tireless worker with inexhaustible resources, he linked and coordinated the facts and opinions scattered throughout a large administration system with unparalleled wisdom' he quickly taught himself to ask short questions that demanded direct answers."
+> "A tireless worker with inexhaustible resources, he linked and coordinated the facts and opinions scattered throughout a large administration system with unparalleled wisdom . . . he quickly taught himself to ask short questions that demanded direct answers."
 
+> "What a pity the man wasn't lazy."
+> --- Talleyrand on Napoleon
 
-**NEED TO ADD BUTTON**
-[If you'd like to buy the book](https://www.thriftbooks.com/w/napoleon-a-life/9163469/)
+> "Everything passes rapidly on earth, with the exception of the mark we leave on history"
+> --- Napoleon
+
+> "Napoleon was excellent at prioritization, dealing immediately with urgent matters, placing important but not urgent papers in a stack to be dealt with afterwards, and throwing anything he considered unimportant into the floor."
+
+> "To live is to suffer, and a human being who is worthy of honor must always struggle for mastery of self."
+> --- Napoleon
+
+> "More battles are lost by loss of hope than loss of blood"
+> --- Napoleon
+
+> "In my own case it's taken me years to cultivate self control to prevent my emotions from betraying themselves . . . Without all this self-control, do you think I could have done all I've done?"
+> --- Napoleon
+
+> "True heroism consists of being superior to the ills of life, in whatever shape they may challenge to the combat."
+> --- Napoleon on board the HMS Northumberland, 1815
