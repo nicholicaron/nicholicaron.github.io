@@ -45,9 +45,6 @@ A **finite automaton** (FA) is a five-tuple (S, &Sigma;, &delta;, s<sub>0</sub>,
 
 This five-tuple is equivalent to the transition diagram; given one we can easily recreate the other.
 
-![Finite automata formal definition](/assets/images/compilers/scanner/finite_automata_ex.png){: .post-image }
-*Formal definition of a finite automaton with the transition function, states, and acceptance criteria.*
-
 ### Acceptance
 
 An FA accepts a string **x** if and only if, starting in s<sub>0</sub>, the sequence of characters in **x** takes the FA through a series of transitions that leaves it in an accepting state when the entire string has been consumed.
@@ -60,17 +57,39 @@ Two cases indicate the input is **not** a valid word:
 1. The **error state** s<sub>e</sub> — a sequence of characters isn't a valid prefix for any word in the language
 2. The FA reaches the end of the input while in a **non-accepting** state
 
-![Finite automata acceptance](/assets/images/compilers/scanner/finite_automata_acceptance.png){: .post-image }
-*The acceptance condition and error cases for finite automata.*
-
 ### Cyclic vs. Acyclic Transition Diagrams
 
 Any finite set of words can be encoded in an **acyclic** transition diagram. Certain infinite sets — like the set of all integers or identifiers in Java — give rise to **cyclic** transition diagrams.
 
 A simplified rule for identifier names in Algol-like languages (C, Java, etc.): an identifier consists of an alphabetic character followed by zero or more alphanumeric characters.
 
-![Cyclic transition diagram for identifiers](/assets/images/compilers/scanner/cyclic_transition_diagram.png){: .post-image }
-*A cyclic transition diagram recognizing identifiers: an alphabetic character followed by zero or more alphanumeric characters.*
+<div style="overflow-x: auto; margin: 2rem 0;">
+<svg viewBox="0 0 460 140" width="460" height="140" xmlns="http://www.w3.org/2000/svg" style="display: block; margin: 0 auto; font-family: 'JetBrains Mono', monospace; max-width: 100%;">
+  <!-- Start arrow -->
+  <line x1="10" y1="70" x2="48" y2="70" stroke="currentColor" stroke-width="1.5" marker-end="url(#arrowhead-id)"/>
+  <!-- S0 -->
+  <circle cx="90" cy="70" r="30" fill="none" stroke="currentColor" stroke-width="1.5"/>
+  <text x="90" y="75" text-anchor="middle" fill="currentColor" font-size="14">S₀</text>
+  <!-- Transition S0 -> S1 -->
+  <line x1="120" y1="70" x2="218" y2="70" stroke="currentColor" stroke-width="1.5" marker-end="url(#arrowhead-id)"/>
+  <text x="170" y="58" text-anchor="middle" fill="currentColor" font-size="11">a–z, A–Z</text>
+  <!-- S1 (accepting — double circle) -->
+  <circle cx="250" cy="70" r="30" fill="none" stroke="currentColor" stroke-width="1.5"/>
+  <circle cx="250" cy="70" r="24" fill="none" stroke="currentColor" stroke-width="1.5"/>
+  <text x="250" y="75" text-anchor="middle" fill="currentColor" font-size="14">S₁</text>
+  <!-- Self-loop on S1 -->
+  <path d="M 268,48 C 310,0 340,0 340,40 C 340,60 310,70 280,70" fill="none" stroke="currentColor" stroke-width="1.5" marker-end="url(#arrowhead-id)"/>
+  <text x="340" y="22" text-anchor="middle" fill="currentColor" font-size="10">a–z, A–Z,</text>
+  <text x="340" y="35" text-anchor="middle" fill="currentColor" font-size="10">0–9</text>
+  <!-- Arrowhead marker -->
+  <defs>
+    <marker id="arrowhead-id" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="currentColor"/>
+    </marker>
+  </defs>
+</svg>
+</div>
+<p style="text-align: center; font-style: italic; color: var(--on-surface-variant); font-size: 0.9rem; margin-top: -0.5rem;">A cyclic transition diagram recognizing identifiers: an alphabetic character followed by zero or more alphanumeric characters.</p>
 
 ## Regular Expressions
 
@@ -143,8 +162,56 @@ Allowing `*` in the body (more complex due to multi-character delimiters):
 /*(^* | *+^/)**/
 ```
 
-![Multiline comment FA](/assets/images/compilers/scanner/re_multiline_comments.png){: .post-image }
-*An FA implementing the RE for multiline comments that allows `*` within the comment body.*
+<div style="overflow-x: auto; margin: 2rem 0;">
+<svg viewBox="0 0 620 160" width="620" height="160" xmlns="http://www.w3.org/2000/svg" style="display: block; margin: 0 auto; font-family: 'JetBrains Mono', monospace; max-width: 100%;">
+  <!-- Start arrow -->
+  <line x1="5" y1="80" x2="33" y2="80" stroke="currentColor" stroke-width="1.5" marker-end="url(#ah-cmt)"/>
+  <!-- S0 -->
+  <circle cx="60" cy="80" r="25" fill="none" stroke="currentColor" stroke-width="1.5"/>
+  <text x="60" y="85" text-anchor="middle" fill="currentColor" font-size="13">S₀</text>
+  <!-- S0 -> S1 -->
+  <line x1="85" y1="80" x2="113" y2="80" stroke="currentColor" stroke-width="1.5" marker-end="url(#ah-cmt)"/>
+  <text x="100" y="72" text-anchor="middle" fill="currentColor" font-size="10">/</text>
+  <!-- S1 -->
+  <circle cx="140" cy="80" r="25" fill="none" stroke="currentColor" stroke-width="1.5"/>
+  <text x="140" y="85" text-anchor="middle" fill="currentColor" font-size="13">S₁</text>
+  <!-- S1 -> S2 -->
+  <line x1="165" y1="80" x2="193" y2="80" stroke="currentColor" stroke-width="1.5" marker-end="url(#ah-cmt)"/>
+  <text x="180" y="72" text-anchor="middle" fill="currentColor" font-size="10">*</text>
+  <!-- S2 -->
+  <circle cx="220" cy="80" r="25" fill="none" stroke="currentColor" stroke-width="1.5"/>
+  <text x="220" y="85" text-anchor="middle" fill="currentColor" font-size="13">S₂</text>
+  <!-- Self-loop S2: ^* -->
+  <path d="M 206,58 C 190,10 250,10 234,58" fill="none" stroke="currentColor" stroke-width="1.5" marker-end="url(#ah-cmt)"/>
+  <text x="220" y="18" text-anchor="middle" fill="currentColor" font-size="10">^*</text>
+  <!-- S2 -> S3 -->
+  <line x1="245" y1="80" x2="313" y2="80" stroke="currentColor" stroke-width="1.5" marker-end="url(#ah-cmt)"/>
+  <text x="280" y="72" text-anchor="middle" fill="currentColor" font-size="10">*</text>
+  <!-- S3 -->
+  <circle cx="340" cy="80" r="25" fill="none" stroke="currentColor" stroke-width="1.5"/>
+  <text x="340" y="85" text-anchor="middle" fill="currentColor" font-size="13">S₃</text>
+  <!-- Self-loop S3: * -->
+  <path d="M 326,58 C 310,10 370,10 354,58" fill="none" stroke="currentColor" stroke-width="1.5" marker-end="url(#ah-cmt)"/>
+  <text x="340" y="18" text-anchor="middle" fill="currentColor" font-size="10">*</text>
+  <!-- S3 -> S2 (back edge, curved below) -->
+  <path d="M 318,100 C 300,145 240,145 228,102" fill="none" stroke="currentColor" stroke-width="1.5" marker-end="url(#ah-cmt)"/>
+  <text x="272" y="150" text-anchor="middle" fill="currentColor" font-size="10">^(* | /)</text>
+  <!-- S3 -> S4 -->
+  <line x1="365" y1="80" x2="433" y2="80" stroke="currentColor" stroke-width="1.5" marker-end="url(#ah-cmt)"/>
+  <text x="400" y="72" text-anchor="middle" fill="currentColor" font-size="10">/</text>
+  <!-- S4 (accepting) -->
+  <circle cx="460" cy="80" r="25" fill="none" stroke="currentColor" stroke-width="1.5"/>
+  <circle cx="460" cy="80" r="19" fill="none" stroke="currentColor" stroke-width="1.5"/>
+  <text x="460" y="85" text-anchor="middle" fill="currentColor" font-size="13">S₄</text>
+  <!-- Arrowhead -->
+  <defs>
+    <marker id="ah-cmt" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="currentColor"/>
+    </marker>
+  </defs>
+</svg>
+</div>
+<p style="text-align: center; font-style: italic; color: var(--on-surface-variant); font-size: 0.9rem; margin-top: -0.5rem;">An FA recognizing multiline comments (<code>/* ... */</code>) that allows <code>*</code> within the comment body.</p>
 
 **6. Registers** (for a processor with ≥32 registers):
 
