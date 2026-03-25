@@ -42,15 +42,100 @@ Well, if the question is a general one, see this [previous article](/2022/02/08/
 
 If there's one piece of software that you want to be formally verified and memory safe, it's the compiler. On that note, if there's a second piece of software that you want to be formally verified and memory safe, it's the operating system. There's a good chance that Redox OS will be the first general-purpose OS written entirely in Rust.
 
+## A Personal Aside
+
+I know AI may be all the rage, but I tend to admire systems programmers — and more generally, people who choose the more difficult paths in life. Since the consequence of admiration is emulation, this, mixed with masochism and a proclivity for patterns, has led me to develop a penchant for tinkering with low-level systems.
+
+Some people I look up to: John Carmack, Chris Lattner, Jim Keller, Jon Gjengset, Dan Luu, Brandon Falk, and George Hotz.
+
+I also enjoy learning languages. In high school I took five Spanish classes, plus Arabic and American Sign Language. My dad's side of the family are Francophones from Quebec, so that's next on my list. Languages in general are all about expressing intent (semantics) via agreed-upon form (syntax) and abstractions. One of the primary differences between spoken languages and programming languages is ambiguity.
+
+## What Compilers Make Good Use Of
+
+Compilers sit at the intersection of nearly every subfield in CS. From *Engineering a Compiler*:
+
+- **Greedy Algorithms** — Register allocation
+- **Heuristic Search** — List scheduling
+- **Graph Algorithms** — Dead-code elimination
+- **Dynamic Programming** — Instruction selection
+- **Automata Theory** — Parsing & scanning
+- **Fixed-Point Algorithms** — Data-flow analysis
+
+And they *apply* theory in practice in concrete ways:
+
+| Theory Applied | Where in the Compiler |
+|---|---|
+| Formal language theory | Scanners & parsers |
+| Lattice theory, number theory | Type checking & static analysis |
+| Tree-pattern matching, dynamic programming | Code generators |
+
+> "Compiler construction brings together ideas and techniques from across the breadth of computer science and applies them in a constrained setting to solve some truly hard problems."
+> — Cooper & Torczon
+
+## Fundamental Principles of Compilation
+
+Two axioms govern all compiler design:
+
+1. **The compiler must preserve the meaning of the input program.** Correctness lies at the heart of the social contract between you and your users as the author of a compiler.
+2. **The compiler must discernibly improve the input program.**
+
+> "Good compilers approximate the solutions to hard problems. They emphasize efficiency, in their own implementations and in the code they generate."
+
+> "A successful compiler executes an unimaginable number of times... Thus, compiler writers must pay attention to compile time costs, such as the asymptotic complexity of algorithms and the space used by data structures."
+
+And for JIT compilers, the stakes are even higher:
+
+> "JIT construction may be the ultimate feat of compiler engineering. Because the system must recoup compile time through improved running time..."
+
 ## The Anatomy of a Compiler
 
-The compilation process can be broken down into stages, each responsible for a specific transformation of the source code. At a high level, a compiler takes human-readable source code and transforms it into machine code that can be executed by a processor. The major phases include:
+The compilation process can be broken down into stages, each responsible for a specific transformation of the source code. At a high level, a compiler takes human-readable source code and transforms it into machine code that can be executed by a processor.
 
-1. **Scanning** (Lexical Analysis) — Breaking source code into tokens
-2. **Parsing** (Syntax Analysis) — Building a parse tree from tokens
-3. **Semantic Analysis** — Type checking and scope resolution
-4. **Optimization** — Improving code efficiency
-5. **Code Generation** — Producing target machine code
+![Compiler structure](/assets/images/compilers/intro/compiler_structure-3.png){: .post-image }
+
+### Front End: Source → IR
+
+The front end encodes the intent (semantics) of the source program into an **Intermediate Representation** (IR) — some set of data structures to represent the code it processes. The **definitive IR** is the version of the program passed between independent phases (e.g., front end → back end).
+
+- **Scanner** — Tokenizes the source code
+- **Parser** — Builds a parse tree from the tokens
+- **Elaborator** — Performs additional computation: type checking, constant folding, laying out storage, building the IR
+
+### Optimizer (Optional): IR → IR
+
+May make several passes over the IR, recursively integrating metadata and creating shortcuts from previous passes to optimize for some metric.
+
+- **Data-flow analysis** — Typically solves a system of simultaneous set equations based on facts derived from the IR
+- **Control-flow analysis** — Computes information like dominance relations
+- **Dependence analysis** — Uses number-theoretic tests to reason about the relative independence of memory references
+
+### Back End: IR → Target ISA
+
+- **Instruction Selector** — Translates IR into the target machine's ISA (x86, ARM, RISC-V, JVM, etc.)
+- **Register Allocator** — Assigns registers to variables
+- **Instruction Scheduler** — Orders instructions to minimize pipeline stalls
+
+## Thinking About Time
+
+When building compilers, several temporal slots matter:
+
+- **Design time** — Choosing algorithms and data structures
+- **Build time** — Constructing the compiler itself
+- **Compile time** — When the compiler runs on user code
+- **Runtime** — When the compiled program executes
+
+The key insight: behavior that occurs at one time is *planned* at another. A compiler writer must reason about which data structures exist at each phase and how decisions made at build time affect performance at compile time and runtime.
+
+## Separate Compilation
+
+Most real compilers invoke separately for each source file:
+
+- Each source file compiles independently into an **object file**
+- A **linker** combines the object files into a single executable
+
+**Advantages:** Faster incremental compilation (only changed files recompile), easier code reuse (libraries compile once, used by many programs).
+
+**Disadvantages:** More complex build systems (dependency tracking), more complex debugging (which object file has the error?).
 
 ## Written Assignments
 

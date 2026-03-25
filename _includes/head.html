@@ -182,6 +182,16 @@
     opacity: 1;
     transform: translateY(0);
   }
+  /* MathJax inline rendering */
+  mjx-container[jax="SVG"] {
+    display: inline !important;
+    vertical-align: baseline !important;
+  }
+  mjx-container[jax="SVG"][display="true"] {
+    display: block !important;
+    text-align: center;
+    margin: 1.5rem 0;
+  }
   /* Rouge syntax highlighting */
   .highlight pre {
     padding: 1.5rem;
