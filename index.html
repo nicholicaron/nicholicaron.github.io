@@ -461,14 +461,17 @@
        ============================================ -->
   <section id="writing" class="mb-32 reveal">
 
-    <!-- Featured post (newest) -->
+    <!-- Featured post — curated highlight -->
+    {% assign featured = nil %}
+    {% for post in site.posts %}
+      {% if post.title == "Take Heed of the Hydra" %}{% assign featured = post %}{% endif %}
+    {% endfor %}
     <div class="mb-20">
-      {% assign featured = site.posts.first %}
       <div class="bg-surface-container-low p-10 md:p-16 relative overflow-hidden group border border-outline-variant/30 rounded">
         <div class="relative z-10 editorial-grid">
           <div class="col-span-12 md:col-span-7 flex flex-col justify-center">
             <div class="flex items-center gap-4 mb-6">
-              <span class="font-label text-[10px] font-bold uppercase tracking-[0.2em] text-primary">Latest</span>
+              <span class="font-label text-[10px] font-bold uppercase tracking-[0.2em] text-primary">Featured</span>
               <span class="w-1 h-1 rounded-full bg-outline-variant"></span>
               <span class="font-mono text-[10px] text-on-surface-variant uppercase tracking-[0.2em]">{{ featured.date | date: "%b %d, %Y" }}</span>
             </div>
@@ -491,42 +494,37 @@
       </div>
     </div>
 
-    <!-- Article list with sidebar -->
+    <!-- Curated selection + browse link -->
+    {% comment %}Hand-picked posts for variety across categories{% endcomment %}
+    {% assign showcase_titles = "Convolutions of Grandeur|Modern Algebra II: Rings, Ideals, and Quotient Rings|Compiler Design & Implementation|Autodifferentiation|Why Rust?" | split: "|" %}
+    {% assign showcase_posts = "" | split: "" %}
+    {% for title in showcase_titles %}
+      {% for post in site.posts %}
+        {% if post.title == title %}
+          {% assign showcase_posts = showcase_posts | push: post %}
+          {% break %}
+        {% endif %}
+      {% endfor %}
+    {% endfor %}
+
     <div class="editorial-grid">
-      <!-- Sidebar categories -->
-      <aside class="col-span-12 md:col-span-3 mb-12 md:mb-0">
+      <aside class="col-span-12 md:col-span-3 mb-8 md:mb-0">
         <div class="sticky top-36">
-          <h3 class="font-label text-[10px] font-bold uppercase tracking-[0.3em] text-on-surface mb-8 opacity-50">Categories</h3>
-          <ul class="space-y-4">
-            <li><a href="#" class="filter-btn font-headline italic text-xl text-primary border-b border-primary/20 active" data-filter="all">All Writings</a></li>
-            <li><a href="#" class="filter-btn font-headline italic text-xl text-on-surface-variant hover:text-primary transition-colors" data-filter="technical">Deep Learning</a></li>
-            <li><a href="#" class="filter-btn font-headline italic text-xl text-on-surface-variant hover:text-primary transition-colors" data-filter="systems">Systems & Compilers</a></li>
-            <li><a href="#" class="filter-btn font-headline italic text-xl text-on-surface-variant hover:text-primary transition-colors" data-filter="math">Mathematics</a></li>
-            <li><a href="#" class="filter-btn font-headline italic text-xl text-on-surface-variant hover:text-primary transition-colors" data-filter="reading">Reading Notes</a></li>
-          </ul>
+          <h3 class="font-label text-[10px] font-bold uppercase tracking-[0.3em] text-on-surface mb-8 opacity-50">Selected</h3>
+          <a href="/writing" class="font-label text-[10px] font-bold uppercase tracking-widest text-on-background inline-flex items-center gap-2 border-b border-primary/40 pb-1 hover:border-primary transition-colors">
+            Browse All Essays
+            <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+          </a>
         </div>
       </aside>
 
-      <!-- Post list -->
-      <div class="col-span-12 md:col-span-8 md:col-start-5 space-y-16">
-        {% for post in site.posts offset:1 %}
-        {% assign category = "reading" %}
-        {% for tag in post.tags %}
-          {% if tag == "AI" or tag == "Deep Learning" or tag == "Transformers" or tag == "CNNs" or tag == "Computer Vision" %}
-            {% assign category = "technical" %}
-          {% endif %}
-          {% if tag == "Compilers" or tag == "Rust" or tag == "Systems Programming" or tag == "Computer Science" %}
-            {% assign category = "systems" %}
-          {% endif %}
-          {% if tag == "Math" or tag == "Linear Algebra" %}
-            {% assign category = "math" %}
-          {% endif %}
-        {% endfor %}
-        <article class="group post-item" data-category="{{ category }}">
-          <div class="flex flex-col md:flex-row gap-4 md:gap-8 items-baseline">
-            <time class="font-mono text-[11px] uppercase tracking-[0.15em] text-on-surface-variant shrink-0 md:w-32 opacity-60">{{ post.date | date: "%b %d, %Y" }}</time>
+      <div class="col-span-12 md:col-span-8 md:col-start-5 space-y-12">
+        {% for post in showcase_posts %}
+        <article class="group">
+          <div class="flex flex-col md:flex-row gap-3 md:gap-8 items-baseline">
+            <time class="font-mono text-[11px] uppercase tracking-[0.15em] text-on-surface-variant shrink-0 md:w-28 opacity-60">{{ post.date | date: "%b %d, %Y" }}</time>
             <div class="flex-grow">
-              <div class="flex flex-wrap gap-2 mb-3">
+              <div class="flex flex-wrap gap-2 mb-2">
                 {% for tag in post.tags %}
                 <span class="font-label text-[10px] uppercase tracking-[0.25em] text-primary font-bold">{{ tag }}</span>
                 {% if forloop.last == false %}<span class="text-outline-variant">&middot;</span>{% endif %}
@@ -535,10 +533,6 @@
               <h3 class="font-headline text-2xl md:text-3xl text-on-background group-hover:text-primary transition-colors cursor-pointer leading-snug tracking-tight">
                 <a href="{{ post.url }}">{{ post.title }}</a>
               </h3>
-              <a href="{{ post.url }}" class="mt-5 font-label text-[10px] font-bold uppercase tracking-widest text-on-background flex items-center gap-2 border-b border-transparent hover:border-primary w-fit pb-1 transition-all">
-                Continue Reading
-                <span class="material-symbols-outlined text-[14px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
-              </a>
             </div>
           </div>
         </article>
@@ -727,21 +721,6 @@
     sections.forEach(function(s) { observer.observe(s); });
   });
 
-  // ── Blog Category Filter ──────────────────────────
-  document.addEventListener('DOMContentLoaded', function() {
-    var filterBtns = document.querySelectorAll('.filter-btn');
-    var posts = document.querySelectorAll('.post-item');
-    filterBtns.forEach(function(btn) {
-      btn.addEventListener('click', function(e) {
-        e.preventDefault();
-        var filter = this.dataset.filter;
-        filterBtns.forEach(function(b) { b.classList.remove('text-primary', 'border-b', 'border-primary/20', 'active'); b.classList.add('text-on-surface-variant'); });
-        this.classList.add('text-primary', 'border-b', 'border-primary/20', 'active');
-        this.classList.remove('text-on-surface-variant');
-        posts.forEach(function(p) { p.style.display = (filter === 'all' || p.dataset.category === filter) ? '' : 'none'; });
-      });
-    });
-  });
 
   // ── Mobile Nav Toggle ─────────────────────────────
   document.addEventListener('DOMContentLoaded', function() {

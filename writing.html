@@ -1,0 +1,653 @@
+---
+layout: null
+permalink: /writing
+---
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+  <title>Writing — Nicholi Caron</title>
+  <meta name="description" content="Essays on mathematics, deep learning, systems programming, and more.">
+  <meta property="og:title" content="Writing — Nicholi Caron">
+  <meta property="og:description" content="Essays on mathematics, deep learning, systems programming, and more.">
+  <meta property="og:type" content="website">
+  {% include head.html %}
+  <script src="https://unpkg.com/lunr/lunr.js"></script>
+  <style>
+    mark {
+      background: var(--primary-fixed);
+      color: var(--on-primary-container);
+      padding: 0.05em 0.15em;
+      border-radius: 2px;
+    }
+    .topic-group { display: none; }
+    .topic-group.active { display: block; }
+    .search-results { display: none; }
+    .search-results.active { display: block; }
+    .browse-content.hidden-by-search { display: none; }
+  </style>
+</head>
+<body class="font-body">
+
+<!-- Navigation -->
+<nav class="fixed top-0 w-full z-50" style="background-color: color-mix(in srgb, var(--surface) 80%, transparent); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); box-shadow: 0 8px 24px rgba(0,0,0,0.06);">
+  <div class="flex justify-between items-center w-full px-6 md:px-8 py-5 max-w-7xl mx-auto">
+    <a href="/" class="font-label text-sm uppercase tracking-widest text-on-surface-variant hover:text-on-background transition-colors duration-300 flex items-center gap-2">
+      <span class="material-symbols-outlined text-[16px]">arrow_back</span>
+      Home
+    </a>
+    <div class="flex items-center gap-4">
+      <button id="theme-toggle" class="p-2 rounded-lg transition-colors duration-300 text-on-surface-variant hover:text-on-background" aria-label="Toggle theme">
+        <span class="material-symbols-outlined text-xl theme-icon-light">dark_mode</span>
+        <span class="material-symbols-outlined text-xl theme-icon-dark hidden">light_mode</span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<main class="pt-36 pb-24 px-6 md:px-12 max-w-7xl mx-auto">
+
+  <div class="editorial-grid">
+
+    <!-- ── Sidebar ── -->
+    <aside class="col-span-12 md:col-span-3 mb-12 md:mb-0">
+      <div class="sticky top-36">
+        <span class="font-label text-[10px] font-bold uppercase tracking-[0.3em] text-primary mb-4 block">Essays</span>
+        <h1 class="font-headline text-4xl md:text-5xl text-on-background tracking-tight mb-10">Writing</h1>
+
+        <!-- Search -->
+        <div class="relative mb-10">
+          <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant opacity-40 text-[18px]">search</span>
+          <input
+            id="search-input"
+            type="text"
+            placeholder="Search essays..."
+            class="w-full pl-10 pr-3 py-2.5 bg-surface-container border border-outline-variant/30 rounded font-body text-sm text-on-background placeholder:text-on-surface-variant/40 focus:outline-none focus:border-primary/50 transition-colors"
+          />
+        </div>
+
+        <!-- Topic navigation -->
+        <h3 class="font-label text-[10px] font-bold uppercase tracking-[0.3em] text-on-surface mb-6 opacity-50">Topics</h3>
+        <ul class="space-y-3">
+          {% assign math_count = 0 %}{% assign dl_count = 0 %}{% assign sys_count = 0 %}{% assign read_count = 0 %}
+          {% for post in site.posts %}
+            {% assign counted = false %}
+            {% for tag in post.tags %}
+              {% if counted == false %}
+                {% if tag == "Math" or tag == "Analysis" or tag == "Calculus" or tag == "Combinatorics" or tag == "Graph Theory" or tag == "Algebra" or tag == "Group Theory" or tag == "Ring Theory" %}{% assign math_count = math_count | plus: 1 %}{% assign counted = true %}
+                {% elsif tag == "AI" or tag == "Deep Learning" or tag == "Transformers" or tag == "CNNs" or tag == "Computer Vision" %}{% assign dl_count = dl_count | plus: 1 %}{% assign counted = true %}
+                {% elsif tag == "Compilers" or tag == "Rust" or tag == "Systems Programming" or tag == "Computer Science" or tag == "Linear Algebra" %}{% assign sys_count = sys_count | plus: 1 %}{% assign counted = true %}
+                {% endif %}
+              {% endif %}
+            {% endfor %}
+            {% unless counted %}{% assign read_count = read_count | plus: 1 %}{% endunless %}
+          {% endfor %}
+          <li>
+            <a href="#" class="topic-nav-btn flex items-baseline justify-between group active" data-topic="all">
+              <span class="font-headline italic text-lg text-primary transition-colors">All</span>
+              <span class="font-mono text-[10px] text-on-surface-variant opacity-50">{{ site.posts.size }}</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="topic-nav-btn flex items-baseline justify-between group" data-topic="math">
+              <span class="font-headline italic text-lg text-on-surface-variant group-hover:text-primary transition-colors">Mathematics</span>
+              <span class="font-mono text-[10px] text-on-surface-variant opacity-50">{{ math_count }}</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="topic-nav-btn flex items-baseline justify-between group" data-topic="technical">
+              <span class="font-headline italic text-lg text-on-surface-variant group-hover:text-primary transition-colors">Deep Learning</span>
+              <span class="font-mono text-[10px] text-on-surface-variant opacity-50">{{ dl_count }}</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="topic-nav-btn flex items-baseline justify-between group" data-topic="systems">
+              <span class="font-headline italic text-lg text-on-surface-variant group-hover:text-primary transition-colors">Systems</span>
+              <span class="font-mono text-[10px] text-on-surface-variant opacity-50">{{ sys_count }}</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="topic-nav-btn flex items-baseline justify-between group" data-topic="reading">
+              <span class="font-headline italic text-lg text-on-surface-variant group-hover:text-primary transition-colors">Reading Notes</span>
+              <span class="font-mono text-[10px] text-on-surface-variant opacity-50">{{ read_count }}</span>
+            </a>
+          </li>
+        </ul>
+
+        <!-- Sidebar quote -->
+        <div class="hidden md:block mt-12 p-8 bg-surface-container border-l-2 border-primary/30">
+          <p class="font-headline italic text-lg leading-relaxed text-on-surface">"The only way to learn mathematics is to do mathematics."</p>
+          <p class="font-label text-[10px] uppercase tracking-widest mt-4 text-on-surface-variant opacity-60">&#8212; Paul Halmos</p>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ── Content area ── -->
+    <div class="col-span-12 md:col-span-8 md:col-start-5">
+
+      <!-- Search results (hidden until query) -->
+      <div id="search-results" class="search-results">
+        <div class="flex items-baseline justify-between mb-8">
+          <span id="search-status" class="font-mono text-[11px] uppercase tracking-[0.15em] text-on-surface-variant opacity-60"></span>
+          <button id="search-clear" class="font-label text-[10px] uppercase tracking-widest text-primary hover:text-on-background transition-colors">Clear</button>
+        </div>
+        <div id="search-results-list" class="space-y-16"></div>
+      </div>
+
+      <!-- Browse content -->
+      <div id="browse-content" class="browse-content">
+
+        <!-- ALL view: grouped by topic with subtags -->
+        <div id="topic-all" class="topic-group active">
+
+          <!-- ── Mathematics ── -->
+          <div class="mb-20">
+            <div class="flex items-center gap-4 mb-10">
+              <span class="font-label text-[10px] font-bold uppercase tracking-[0.3em] text-primary">Mathematics</span>
+              <div class="flex-grow h-px bg-outline-variant/30"></div>
+            </div>
+
+            {% comment %}Group math posts by primary sub-topic{% endcomment %}
+            {% assign math_subtopics = "Analysis|Algebra|Calculus|Graph Theory|Combinatorics" | split: "|" %}
+            {% for subtopic in math_subtopics %}
+              {% assign sub_posts = "" | split: "" %}
+              {% for post in site.posts %}
+                {% assign post_subtopic = "" %}
+                {% for tag in post.tags %}
+                  {% if post_subtopic == "" %}
+                    {% if tag == "Analysis" or tag == "Real Analysis" %}{% assign post_subtopic = "Analysis" %}
+                    {% elsif tag == "Group Theory" or tag == "Ring Theory" or tag == "Algebra" %}{% assign post_subtopic = "Algebra" %}
+                    {% elsif tag == "Calculus" or tag == "Multivariable Calculus" %}{% assign post_subtopic = "Calculus" %}
+                    {% elsif tag == "Graph Theory" %}{% assign post_subtopic = "Graph Theory" %}
+                    {% elsif tag == "Enumerative Combinatorics" %}{% assign post_subtopic = "Combinatorics" %}
+                    {% elsif tag == "Combinatorics" and post_subtopic == "" %}{% assign post_subtopic = "Combinatorics" %}
+                    {% endif %}
+                  {% endif %}
+                {% endfor %}
+                {% if post_subtopic == subtopic %}
+                  {% assign sub_posts = sub_posts | push: post %}
+                {% endif %}
+              {% endfor %}
+              {% if sub_posts.size > 0 %}
+              <div class="mb-12">
+                <div class="font-mono text-[11px] uppercase tracking-[0.15em] text-on-surface-variant opacity-40 mb-6">{{ subtopic }}</div>
+                <div class="space-y-8">
+                  {% for post in sub_posts %}
+                  <article class="group">
+                    <div class="flex flex-col md:flex-row gap-3 md:gap-8 items-baseline">
+                      <time class="font-mono text-[11px] uppercase tracking-[0.15em] text-on-surface-variant shrink-0 md:w-28 opacity-60">{{ post.date | date: "%b %Y" }}</time>
+                      <div class="flex-grow">
+                        <h3 class="font-headline text-xl md:text-2xl text-on-background group-hover:text-primary transition-colors cursor-pointer leading-snug tracking-tight">
+                          <a href="{{ post.url }}">{{ post.title }}</a>
+                        </h3>
+                        <div class="flex flex-wrap gap-2 mt-2">
+                          {% for tag in post.tags %}
+                          <span class="bg-surface-container px-2 py-0.5 rounded-full font-mono text-[10px] text-on-surface-variant">{{ tag }}</span>
+                          {% endfor %}
+                        </div>
+                      </div>
+                    </div>
+                  </article>
+                  {% endfor %}
+                </div>
+              </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+
+          <!-- ── Deep Learning ── -->
+          <div class="mb-20">
+            <div class="flex items-center gap-4 mb-10">
+              <span class="font-label text-[10px] font-bold uppercase tracking-[0.3em] text-primary">Deep Learning & AI</span>
+              <div class="flex-grow h-px bg-outline-variant/30"></div>
+            </div>
+            <div class="space-y-8">
+              {% for post in site.posts %}
+                {% assign is_dl = false %}
+                {% for tag in post.tags %}
+                  {% if tag == "AI" or tag == "Deep Learning" or tag == "Transformers" or tag == "CNNs" or tag == "Computer Vision" %}{% assign is_dl = true %}{% endif %}
+                {% endfor %}
+                {% if is_dl %}
+                <article class="group">
+                  <div class="flex flex-col md:flex-row gap-3 md:gap-8 items-baseline">
+                    <time class="font-mono text-[11px] uppercase tracking-[0.15em] text-on-surface-variant shrink-0 md:w-28 opacity-60">{{ post.date | date: "%b %Y" }}</time>
+                    <div class="flex-grow">
+                      <h3 class="font-headline text-xl md:text-2xl text-on-background group-hover:text-primary transition-colors cursor-pointer leading-snug tracking-tight">
+                        <a href="{{ post.url }}">{{ post.title }}</a>
+                      </h3>
+                      <div class="flex flex-wrap gap-2 mt-2">
+                        {% for tag in post.tags %}
+                        <span class="bg-surface-container px-2 py-0.5 rounded-full font-mono text-[10px] text-on-surface-variant">{{ tag }}</span>
+                        {% endfor %}
+                      </div>
+                    </div>
+                  </div>
+                </article>
+                {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+
+          <!-- ── Systems & Compilers ── -->
+          <div class="mb-20">
+            <div class="flex items-center gap-4 mb-10">
+              <span class="font-label text-[10px] font-bold uppercase tracking-[0.3em] text-primary">Systems & Compilers</span>
+              <div class="flex-grow h-px bg-outline-variant/30"></div>
+            </div>
+            <div class="space-y-8">
+              {% for post in site.posts %}
+                {% assign is_sys = false %}
+                {% for tag in post.tags %}
+                  {% if tag == "Compilers" or tag == "Rust" or tag == "Systems Programming" or tag == "Computer Science" or tag == "Linear Algebra" %}{% assign is_sys = true %}{% endif %}
+                {% endfor %}
+                {% if is_sys %}
+                <article class="group">
+                  <div class="flex flex-col md:flex-row gap-3 md:gap-8 items-baseline">
+                    <time class="font-mono text-[11px] uppercase tracking-[0.15em] text-on-surface-variant shrink-0 md:w-28 opacity-60">{{ post.date | date: "%b %Y" }}</time>
+                    <div class="flex-grow">
+                      <h3 class="font-headline text-xl md:text-2xl text-on-background group-hover:text-primary transition-colors cursor-pointer leading-snug tracking-tight">
+                        <a href="{{ post.url }}">{{ post.title }}</a>
+                      </h3>
+                      <div class="flex flex-wrap gap-2 mt-2">
+                        {% for tag in post.tags %}
+                        <span class="bg-surface-container px-2 py-0.5 rounded-full font-mono text-[10px] text-on-surface-variant">{{ tag }}</span>
+                        {% endfor %}
+                      </div>
+                    </div>
+                  </div>
+                </article>
+                {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+
+          <!-- ── Reading Notes ── -->
+          <div class="mb-20">
+            <div class="flex items-center gap-4 mb-10">
+              <span class="font-label text-[10px] font-bold uppercase tracking-[0.3em] text-primary">Reading Notes</span>
+              <div class="flex-grow h-px bg-outline-variant/30"></div>
+            </div>
+            <div class="space-y-8">
+              {% for post in site.posts %}
+                {% assign is_reading = true %}
+                {% for tag in post.tags %}
+                  {% if tag == "AI" or tag == "Deep Learning" or tag == "Transformers" or tag == "CNNs" or tag == "Computer Vision" or tag == "Compilers" or tag == "Rust" or tag == "Systems Programming" or tag == "Computer Science" or tag == "Linear Algebra" or tag == "Math" or tag == "Analysis" or tag == "Calculus" or tag == "Combinatorics" or tag == "Graph Theory" or tag == "Algebra" or tag == "Group Theory" or tag == "Ring Theory" %}{% assign is_reading = false %}{% endif %}
+                {% endfor %}
+                {% if is_reading %}
+                <article class="group">
+                  <div class="flex flex-col md:flex-row gap-3 md:gap-8 items-baseline">
+                    <time class="font-mono text-[11px] uppercase tracking-[0.15em] text-on-surface-variant shrink-0 md:w-28 opacity-60">{{ post.date | date: "%b %Y" }}</time>
+                    <div class="flex-grow">
+                      <h3 class="font-headline text-xl md:text-2xl text-on-background group-hover:text-primary transition-colors cursor-pointer leading-snug tracking-tight">
+                        <a href="{{ post.url }}">{{ post.title }}</a>
+                      </h3>
+                      <div class="flex flex-wrap gap-2 mt-2">
+                        {% for tag in post.tags %}
+                        <span class="bg-surface-container px-2 py-0.5 rounded-full font-mono text-[10px] text-on-surface-variant">{{ tag }}</span>
+                        {% endfor %}
+                      </div>
+                    </div>
+                  </div>
+                </article>
+                {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+
+        <!-- Single-topic views (filtered) -->
+        {% comment %}Mathematics only{% endcomment %}
+        <div id="topic-math" class="topic-group">
+          <div class="flex items-center gap-4 mb-10">
+            <span class="font-label text-[10px] font-bold uppercase tracking-[0.3em] text-primary">Mathematics</span>
+            <div class="flex-grow h-px bg-outline-variant/30"></div>
+          </div>
+          {% assign math_subtopics2 = "Analysis|Algebra|Calculus|Graph Theory|Combinatorics" | split: "|" %}
+          {% for subtopic in math_subtopics2 %}
+            {% assign sub_posts = "" | split: "" %}
+            {% for post in site.posts %}
+              {% assign post_subtopic = "" %}
+              {% for tag in post.tags %}
+                {% if post_subtopic == "" %}
+                  {% if tag == "Analysis" or tag == "Real Analysis" %}{% assign post_subtopic = "Analysis" %}
+                  {% elsif tag == "Group Theory" or tag == "Ring Theory" or tag == "Algebra" %}{% assign post_subtopic = "Algebra" %}
+                  {% elsif tag == "Calculus" or tag == "Multivariable Calculus" %}{% assign post_subtopic = "Calculus" %}
+                  {% elsif tag == "Graph Theory" %}{% assign post_subtopic = "Graph Theory" %}
+                  {% elsif tag == "Enumerative Combinatorics" %}{% assign post_subtopic = "Combinatorics" %}
+                  {% elsif tag == "Combinatorics" and post_subtopic == "" %}{% assign post_subtopic = "Combinatorics" %}
+                  {% endif %}
+                {% endif %}
+              {% endfor %}
+              {% if post_subtopic == subtopic %}
+                {% assign sub_posts = sub_posts | push: post %}
+              {% endif %}
+            {% endfor %}
+            {% if sub_posts.size > 0 %}
+            <div class="mb-12">
+              <div class="font-mono text-[11px] uppercase tracking-[0.15em] text-on-surface-variant opacity-40 mb-6">{{ subtopic }}</div>
+              <div class="space-y-8">
+                {% for post in sub_posts %}
+                <article class="group">
+                  <div class="flex flex-col md:flex-row gap-3 md:gap-8 items-baseline">
+                    <time class="font-mono text-[11px] uppercase tracking-[0.15em] text-on-surface-variant shrink-0 md:w-28 opacity-60">{{ post.date | date: "%b %Y" }}</time>
+                    <div class="flex-grow">
+                      <h3 class="font-headline text-xl md:text-2xl text-on-background group-hover:text-primary transition-colors cursor-pointer leading-snug tracking-tight">
+                        <a href="{{ post.url }}">{{ post.title }}</a>
+                      </h3>
+                      <div class="flex flex-wrap gap-2 mt-2">
+                        {% for tag in post.tags %}
+                        <span class="bg-surface-container px-2 py-0.5 rounded-full font-mono text-[10px] text-on-surface-variant">{{ tag }}</span>
+                        {% endfor %}
+                      </div>
+                    </div>
+                  </div>
+                </article>
+                {% endfor %}
+              </div>
+            </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+
+        {% comment %}Deep Learning only{% endcomment %}
+        <div id="topic-technical" class="topic-group">
+          <div class="flex items-center gap-4 mb-10">
+            <span class="font-label text-[10px] font-bold uppercase tracking-[0.3em] text-primary">Deep Learning & AI</span>
+            <div class="flex-grow h-px bg-outline-variant/30"></div>
+          </div>
+          <div class="space-y-8">
+            {% for post in site.posts %}
+              {% assign is_dl = false %}
+              {% for tag in post.tags %}
+                {% if tag == "AI" or tag == "Deep Learning" or tag == "Transformers" or tag == "CNNs" or tag == "Computer Vision" %}{% assign is_dl = true %}{% endif %}
+              {% endfor %}
+              {% if is_dl %}
+              <article class="group">
+                <div class="flex flex-col md:flex-row gap-3 md:gap-8 items-baseline">
+                  <time class="font-mono text-[11px] uppercase tracking-[0.15em] text-on-surface-variant shrink-0 md:w-28 opacity-60">{{ post.date | date: "%b %Y" }}</time>
+                  <div class="flex-grow">
+                    <h3 class="font-headline text-xl md:text-2xl text-on-background group-hover:text-primary transition-colors cursor-pointer leading-snug tracking-tight">
+                      <a href="{{ post.url }}">{{ post.title }}</a>
+                    </h3>
+                    <div class="flex flex-wrap gap-2 mt-2">
+                      {% for tag in post.tags %}
+                      <span class="bg-surface-container px-2 py-0.5 rounded-full font-mono text-[10px] text-on-surface-variant">{{ tag }}</span>
+                      {% endfor %}
+                    </div>
+                  </div>
+                </div>
+              </article>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+
+        {% comment %}Systems only{% endcomment %}
+        <div id="topic-systems" class="topic-group">
+          <div class="flex items-center gap-4 mb-10">
+            <span class="font-label text-[10px] font-bold uppercase tracking-[0.3em] text-primary">Systems & Compilers</span>
+            <div class="flex-grow h-px bg-outline-variant/30"></div>
+          </div>
+          <div class="space-y-8">
+            {% for post in site.posts %}
+              {% assign is_sys = false %}
+              {% for tag in post.tags %}
+                {% if tag == "Compilers" or tag == "Rust" or tag == "Systems Programming" or tag == "Computer Science" or tag == "Linear Algebra" %}{% assign is_sys = true %}{% endif %}
+              {% endfor %}
+              {% if is_sys %}
+              <article class="group">
+                <div class="flex flex-col md:flex-row gap-3 md:gap-8 items-baseline">
+                  <time class="font-mono text-[11px] uppercase tracking-[0.15em] text-on-surface-variant shrink-0 md:w-28 opacity-60">{{ post.date | date: "%b %Y" }}</time>
+                  <div class="flex-grow">
+                    <h3 class="font-headline text-xl md:text-2xl text-on-background group-hover:text-primary transition-colors cursor-pointer leading-snug tracking-tight">
+                      <a href="{{ post.url }}">{{ post.title }}</a>
+                    </h3>
+                    <div class="flex flex-wrap gap-2 mt-2">
+                      {% for tag in post.tags %}
+                      <span class="bg-surface-container px-2 py-0.5 rounded-full font-mono text-[10px] text-on-surface-variant">{{ tag }}</span>
+                      {% endfor %}
+                    </div>
+                  </div>
+                </div>
+              </article>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+
+        {% comment %}Reading only{% endcomment %}
+        <div id="topic-reading" class="topic-group">
+          <div class="flex items-center gap-4 mb-10">
+            <span class="font-label text-[10px] font-bold uppercase tracking-[0.3em] text-primary">Reading Notes</span>
+            <div class="flex-grow h-px bg-outline-variant/30"></div>
+          </div>
+          <div class="space-y-8">
+            {% for post in site.posts %}
+              {% assign is_reading = true %}
+              {% for tag in post.tags %}
+                {% if tag == "AI" or tag == "Deep Learning" or tag == "Transformers" or tag == "CNNs" or tag == "Computer Vision" or tag == "Compilers" or tag == "Rust" or tag == "Systems Programming" or tag == "Computer Science" or tag == "Linear Algebra" or tag == "Math" or tag == "Analysis" or tag == "Calculus" or tag == "Combinatorics" or tag == "Graph Theory" or tag == "Algebra" or tag == "Group Theory" or tag == "Ring Theory" %}{% assign is_reading = false %}{% endif %}
+              {% endfor %}
+              {% if is_reading %}
+              <article class="group">
+                <div class="flex flex-col md:flex-row gap-3 md:gap-8 items-baseline">
+                  <time class="font-mono text-[11px] uppercase tracking-[0.15em] text-on-surface-variant shrink-0 md:w-28 opacity-60">{{ post.date | date: "%b %Y" }}</time>
+                  <div class="flex-grow">
+                    <h3 class="font-headline text-xl md:text-2xl text-on-background group-hover:text-primary transition-colors cursor-pointer leading-snug tracking-tight">
+                      <a href="{{ post.url }}">{{ post.title }}</a>
+                    </h3>
+                    <div class="flex flex-wrap gap-2 mt-2">
+                      {% for tag in post.tags %}
+                      <span class="bg-surface-container px-2 py-0.5 rounded-full font-mono text-[10px] text-on-surface-variant">{{ tag }}</span>
+                      {% endfor %}
+                    </div>
+                  </div>
+                </div>
+              </article>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+
+      </div><!-- /browse-content -->
+    </div><!-- /content area -->
+
+  </div><!-- /editorial-grid -->
+
+</main>
+
+<!-- Footer -->
+<footer class="w-full mt-20 pt-16 pb-12 bg-surface-container-highest">
+  <div class="flex flex-col md:flex-row justify-between items-center px-6 md:px-12 max-w-7xl mx-auto text-center md:text-left gap-8">
+    <div class="flex flex-col gap-2">
+      <a href="/" class="font-headline italic text-lg text-on-surface-variant hover:text-primary transition-colors">Nicholi Caron</a>
+      <p class="font-label text-xs uppercase tracking-[0.05em] text-on-surface-variant opacity-60">&copy; 2025 Nicholi Caron. Typeset in Newsreader & Inter.</p>
+    </div>
+    <div class="flex gap-8 md:gap-10">
+      <a class="font-label text-xs uppercase tracking-[0.05em] text-on-surface-variant hover:text-primary underline decoration-primary/20 underline-offset-4 transition-all opacity-80 hover:opacity-100" href="https://github.com/nicholicaron" target="_blank" rel="noopener">GitHub</a>
+      <a class="font-label text-xs uppercase tracking-[0.05em] text-on-surface-variant hover:text-primary underline decoration-primary/20 underline-offset-4 transition-all opacity-80 hover:opacity-100" href="https://linkedin.com/in/nicholicaron" target="_blank" rel="noopener">LinkedIn</a>
+      <a class="font-label text-xs uppercase tracking-[0.05em] text-on-surface-variant hover:text-primary underline decoration-primary/20 underline-offset-4 transition-all opacity-80 hover:opacity-100" href="mailto:nicholijcaron@gmail.com">Email</a>
+      <a class="font-label text-xs uppercase tracking-[0.05em] text-on-surface-variant hover:text-primary underline decoration-primary/20 underline-offset-4 transition-all opacity-80 hover:opacity-100" href="{{ '/feed.xml' | relative_url }}">RSS</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function() {
+  // ── Theme Toggle ──
+  function setTheme(theme) {
+    document.documentElement.classList.remove('light', 'dark');
+    document.documentElement.classList.add(theme);
+    localStorage.setItem('theme', theme);
+    document.querySelectorAll('.theme-icon-light').forEach(function(el) { el.classList.toggle('hidden', theme === 'dark'); });
+    document.querySelectorAll('.theme-icon-dark').forEach(function(el) { el.classList.toggle('hidden', theme === 'light'); });
+  }
+  var toggleBtn = document.getElementById('theme-toggle');
+  if (toggleBtn) toggleBtn.addEventListener('click', function() { setTheme(document.documentElement.classList.contains('dark') ? 'light' : 'dark'); });
+  var initTheme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.theme-icon-light').forEach(function(el) { el.classList.toggle('hidden', initTheme === 'dark'); });
+    document.querySelectorAll('.theme-icon-dark').forEach(function(el) { el.classList.toggle('hidden', initTheme === 'light'); });
+  });
+
+  // ── Topic Navigation ──
+  var topicBtns = document.querySelectorAll('.topic-nav-btn');
+  var topicGroups = document.querySelectorAll('.topic-group');
+
+  function switchTopic(topic) {
+    topicBtns.forEach(function(btn) {
+      var span = btn.querySelector('span:first-child');
+      if (btn.dataset.topic === topic) {
+        btn.classList.add('active');
+        span.classList.remove('text-on-surface-variant');
+        span.classList.add('text-primary');
+      } else {
+        btn.classList.remove('active');
+        span.classList.remove('text-primary');
+        span.classList.add('text-on-surface-variant');
+      }
+    });
+    topicGroups.forEach(function(g) {
+      g.classList.toggle('active', g.id === 'topic-' + topic);
+    });
+    history.replaceState(null, '', topic === 'all' ? '/writing' : '/writing#' + topic);
+  }
+
+  topicBtns.forEach(function(btn) {
+    btn.addEventListener('click', function(e) {
+      e.preventDefault();
+      switchTopic(this.dataset.topic);
+      // Clear search when switching topics
+      var input = document.getElementById('search-input');
+      if (input.value) { input.value = ''; clearSearch(); }
+    });
+  });
+
+  // ── Search ──
+  var searchIndex = null;
+  var searchData = null;
+  var searchInput = document.getElementById('search-input');
+  var searchResults = document.getElementById('search-results');
+  var searchResultsList = document.getElementById('search-results-list');
+  var searchStatus = document.getElementById('search-status');
+  var searchClear = document.getElementById('search-clear');
+  var browseContent = document.getElementById('browse-content');
+  var searchTimer = null;
+
+  function initSearch() {
+    if (searchIndex) return Promise.resolve();
+    return fetch('/search-index.json')
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        searchData = {};
+        data.forEach(function(d) { searchData[d.id] = d; });
+        searchIndex = lunr(function() {
+          this.ref('id');
+          this.field('title', { boost: 10 });
+          this.field('tags', { boost: 5 });
+          this.field('body');
+          var idx = this;
+          data.forEach(function(doc) { idx.add(doc); });
+        });
+      });
+  }
+
+  function clearSearch() {
+    searchResults.classList.remove('active');
+    browseContent.classList.remove('hidden-by-search');
+    searchResultsList.innerHTML = '';
+    searchStatus.textContent = '';
+  }
+
+  function doSearch(query) {
+    if (!query) { clearSearch(); return; }
+    initSearch().then(function() {
+      var results;
+      try {
+        results = searchIndex.search(query + '~1');
+        if (results.length === 0) results = searchIndex.search(query + '*');
+      } catch(e) {
+        try { results = searchIndex.search(query + '*'); } catch(e2) { results = []; }
+      }
+      renderResults(results, query);
+    });
+  }
+
+  function renderResults(results, query) {
+    browseContent.classList.add('hidden-by-search');
+    searchResults.classList.add('active');
+
+    if (results.length === 0) {
+      searchStatus.textContent = 'No results';
+      searchResultsList.innerHTML = '<p class="font-body text-on-surface-variant opacity-50 py-8">No essays match your search.</p>';
+      return;
+    }
+
+    searchStatus.textContent = results.length + ' result' + (results.length !== 1 ? 's' : '');
+    var html = '';
+    results.forEach(function(r) {
+      var d = searchData[r.ref];
+      if (!d) return;
+      var title = highlightText(d.title, query);
+      var excerpt = highlightText(d.excerpt, query);
+      var tags = d.tags.split(' ').map(function(t) {
+        return '<span class="bg-surface-container px-2 py-0.5 rounded-full font-mono text-[10px] text-on-surface-variant">' + t + '</span>';
+      }).join(' ');
+
+      html += '<article class="group">' +
+        '<div class="flex flex-col md:flex-row gap-3 md:gap-8 items-baseline">' +
+          '<time class="font-mono text-[11px] uppercase tracking-[0.15em] text-on-surface-variant shrink-0 md:w-28 opacity-60">' + d.date + '</time>' +
+          '<div class="flex-grow">' +
+            '<h3 class="font-headline text-xl md:text-2xl text-on-background group-hover:text-primary transition-colors cursor-pointer leading-snug tracking-tight">' +
+              '<a href="' + d.id + '">' + title + '</a>' +
+            '</h3>' +
+            '<p class="mt-2 font-body text-sm text-on-surface-variant leading-relaxed opacity-60">' + excerpt + '</p>' +
+            '<div class="flex flex-wrap gap-2 mt-2">' + tags + '</div>' +
+          '</div>' +
+        '</div>' +
+      '</article>';
+    });
+    searchResultsList.innerHTML = html;
+  }
+
+  function highlightText(text, query) {
+    if (!query) return text;
+    var words = query.split(/\s+/).filter(function(w) { return w.length > 1; });
+    words.forEach(function(word) {
+      var regex = new RegExp('(' + word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi');
+      text = text.replace(regex, '<mark>$1</mark>');
+    });
+    return text;
+  }
+
+  if (searchInput) {
+    searchInput.addEventListener('input', function() {
+      var query = this.value.trim();
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(function() { doSearch(query); }, 250);
+    });
+  }
+
+  if (searchClear) {
+    searchClear.addEventListener('click', function() {
+      searchInput.value = '';
+      clearSearch();
+      searchInput.focus();
+    });
+  }
+
+  // ── Handle URL hash on load ──
+  document.addEventListener('DOMContentLoaded', function() {
+    var hash = window.location.hash.replace('#', '');
+    if (hash && document.getElementById('topic-' + hash)) {
+      switchTopic(hash);
+    }
+    var params = new URLSearchParams(window.location.search);
+    if (params.get('q')) {
+      searchInput.value = params.get('q');
+      doSearch(params.get('q'));
+    }
+  });
+})();
+</script>
+
+</body>
+</html>
