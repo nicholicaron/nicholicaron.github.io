@@ -1,0 +1,188 @@
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link rel="icon" href="/assets/images/favicon.png" type="image/png">
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          /* Theme-aware colors via CSS custom properties */
+          "on-background":            "var(--on-background)",
+          "on-surface":               "var(--on-surface)",
+          "on-surface-variant":       "var(--on-surface-variant)",
+          "on-primary":               "var(--on-primary)",
+          "on-primary-container":     "var(--on-primary-container)",
+          "on-secondary":             "var(--on-secondary)",
+          "on-secondary-container":   "var(--on-secondary-container)",
+          "primary":                  "var(--primary)",
+          "primary-dim":              "var(--primary-dim)",
+          "primary-container":        "var(--primary-container)",
+          "primary-fixed":            "var(--primary-fixed)",
+          "primary-fixed-dim":        "var(--primary-fixed-dim)",
+          "secondary":                "var(--secondary)",
+          "secondary-container":      "var(--secondary-container)",
+          "surface":                  "var(--surface)",
+          "surface-dim":              "var(--surface-dim)",
+          "surface-bright":           "var(--surface-bright)",
+          "surface-container-lowest": "var(--surface-container-lowest)",
+          "surface-container-low":    "var(--surface-container-low)",
+          "surface-container":        "var(--surface-container)",
+          "surface-container-high":   "var(--surface-container-high)",
+          "surface-container-highest":"var(--surface-container-highest)",
+          "surface-variant":          "var(--surface-variant)",
+          "outline":                  "var(--outline)",
+          "outline-variant":          "var(--outline-variant)",
+          "inverse-surface":          "var(--inverse-surface)",
+          "inverse-on-surface":       "var(--inverse-on-surface)",
+          "error":                    "var(--error)",
+          "on-error":                 "var(--on-error)",
+        },
+        fontFamily: {
+          "headline": ["Newsreader", "Georgia", "serif"],
+          "body": ["Inter", "system-ui", "sans-serif"],
+          "label": ["Inter", "system-ui", "sans-serif"],
+          "mono": ["JetBrains Mono", "Fira Code", "Consolas", "monospace"]
+        },
+        borderRadius: {
+          "DEFAULT": "0.25rem",
+          "lg": "0.5rem",
+          "xl": "0.75rem",
+          "full": "9999px"
+        },
+      },
+    },
+  }
+</script>
+<!-- Theme initialization — prevents flash of wrong theme -->
+<script>
+  (function() {
+    var saved = localStorage.getItem('theme');
+    if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.remove('light');
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      document.documentElement.classList.add('light');
+    }
+  })();
+</script>
+<style>
+  /* ── Light Theme Tokens ── */
+  .light {
+    --on-background: #1c1c19;
+    --on-surface: #1c1c19;
+    --on-surface-variant: #5f5e5e;
+    --on-primary: #ffffff;
+    --on-primary-container: #3d1205;
+    --on-secondary: #ffffff;
+    --on-secondary-container: #5a5048;
+    --primary: #94452b;
+    --primary-dim: #a35338;
+    --primary-container: #fceee9;
+    --primary-fixed: #f8e6e0;
+    --primary-fixed-dim: #eeb8a6;
+    --secondary: #6d625a;
+    --secondary-container: #efe0d5;
+    --surface: #fcf9f4;
+    --surface-dim: #e0dbd6;
+    --surface-bright: #fffbff;
+    --surface-container-lowest: #ffffff;
+    --surface-container-low: #f7f3ee;
+    --surface-container: #f3f0eb;
+    --surface-container-high: #f1ede8;
+    --surface-container-highest: #ebe8e3;
+    --surface-variant: #ebe8e2;
+    --outline: #85736e;
+    --outline-variant: #dbc1ba;
+    --inverse-surface: #31302e;
+    --inverse-on-surface: #f5f0eb;
+    --error: #a64542;
+    --on-error: #ffffff;
+  }
+
+  /* ── Dark Theme Tokens ── */
+  .dark {
+    --on-background: #e3e2de;
+    --on-surface: #e3e2de;
+    --on-surface-variant: #9ba1b0;
+    --on-primary: #ffffff;
+    --on-primary-container: #c5d1ff;
+    --on-secondary: #ffffff;
+    --on-secondary-container: #b0a8a0;
+    --primary: #c47a5e;
+    --primary-dim: #a36048;
+    --primary-container: #2a1d15;
+    --primary-fixed: #f8e6e0;
+    --primary-fixed-dim: #eeb8a6;
+    --secondary: #9b918a;
+    --secondary-container: #3a332d;
+    --surface: #111318;
+    --surface-dim: #0d0f14;
+    --surface-bright: #2a2d38;
+    --surface-container-lowest: #0a0c10;
+    --surface-container-low: #161922;
+    --surface-container: #1a1d26;
+    --surface-container-high: #222530;
+    --surface-container-highest: #2c303b;
+    --surface-variant: #343842;
+    --outline: #5a5e6a;
+    --outline-variant: #3d4150;
+    --inverse-surface: #e3e2de;
+    --inverse-on-surface: #31302e;
+    --error: #ff8a80;
+    --on-error: #4e0309;
+  }
+
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    display: inline-block;
+    line-height: 1;
+  }
+  .editorial-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 1.5rem;
+  }
+  /* Base body styles */
+  body { background-color: var(--surface); color: var(--on-background); }
+  ::selection { background-color: var(--primary-fixed); color: var(--on-primary-container); }
+
+  /* Typing cursor animation */
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+  .typing-cursor::after {
+    content: '|';
+    animation: blink 1s step-end infinite;
+    color: currentColor;
+    margin-left: 2px;
+  }
+  /* Scroll reveal */
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  /* Rouge syntax highlighting */
+  .highlight pre {
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    overflow-x: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.875rem;
+    line-height: 1.7;
+    background-color: var(--surface-container);
+    color: var(--on-surface);
+  }
+</style>

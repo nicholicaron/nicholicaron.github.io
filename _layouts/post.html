@@ -1,36 +1,241 @@
----
-layout: default
----
-<article class="post">
-  <header class="post-header">
-    <h1 class="post-title">{{ page.title }}</h1>
-    <p class="post-meta">
-      <time datetime="{{ page.date | date_to_xmlschema }}">
-        {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
-        {{ page.date | date: date_format }}
-      </time>
-      {%- if page.author -%}
-        • <span itemprop="author" itemscope itemtype="http://schema.org/Person">
-            <span itemprop="name">{{ page.author }}</span>
-          </span>
-      {%- endif -%}
-    </p>
-    {% if page.tags %}
-    <div class="post-tags">
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+  <title>{{ page.title }} — Nicholi Caron</title>
+  <meta name="description" content="{{ page.excerpt | strip_html | truncate: 160 }}">
+  <meta property="og:title" content="{{ page.title }}">
+  <meta property="og:description" content="{{ page.excerpt | strip_html | truncate: 160 }}">
+  <meta property="og:type" content="article">
+  {% include head.html %}
+  <style>
+    /* Post-specific typography */
+    .post-content h1,
+    .post-content h2,
+    .post-content h3,
+    .post-content h4 {
+      font-family: 'Newsreader', Georgia, serif;
+      color: var(--heading-color);
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+    }
+    .post-content h1 { font-size: 2.25rem; }
+    .post-content h2 { font-size: 1.75rem; }
+    .post-content h3 { font-size: 1.375rem; }
+    .post-content h4 { font-size: 1.125rem; }
+
+    .post-content p {
+      margin-bottom: 1.5rem;
+      line-height: 1.85;
+      font-size: 1.05rem;
+    }
+
+    .post-content a {
+      color: var(--link-color);
+      text-decoration: underline;
+      text-decoration-color: var(--link-underline);
+      text-underline-offset: 3px;
+      transition: text-decoration-color 0.2s ease;
+    }
+    .post-content a:hover {
+      text-decoration-color: var(--link-color);
+    }
+
+    .post-content ul, .post-content ol {
+      margin-bottom: 1.5rem;
+      padding-left: 1.75rem;
+    }
+    .post-content li {
+      margin-bottom: 0.5rem;
+      line-height: 1.75;
+      font-size: 1.05rem;
+    }
+
+    .post-content blockquote {
+      border-left: 3px solid var(--accent-border);
+      padding: 1rem 1.5rem;
+      margin: 2rem 0;
+      font-family: 'Newsreader', Georgia, serif;
+      font-style: italic;
+      font-size: 1.15rem;
+      line-height: 1.7;
+      color: var(--blockquote-color);
+      background: var(--blockquote-bg);
+      border-radius: 0 0.25rem 0.25rem 0;
+    }
+
+    .post-content code {
+      font-family: 'JetBrains Mono', 'Fira Code', monospace;
+      font-size: 0.875em;
+      padding: 0.15em 0.4em;
+      border-radius: 0.25rem;
+      background: var(--code-bg);
+    }
+
+    .post-content pre {
+      margin: 2rem 0;
+      border-radius: 0.5rem;
+      overflow-x: auto;
+    }
+    .post-content pre code {
+      padding: 1.5rem;
+      display: block;
+      font-size: 0.85rem;
+      line-height: 1.7;
+      background: var(--pre-bg);
+    }
+
+    .post-content img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 0.5rem;
+      margin: 2rem 0;
+      border: 1px solid var(--img-border);
+    }
+
+    .post-content table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 2rem 0;
+      font-size: 0.95rem;
+    }
+    .post-content th, .post-content td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--table-border);
+      text-align: left;
+    }
+    .post-content th {
+      font-weight: 600;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .post-content hr {
+      border: none;
+      border-top: 1px solid var(--hr-color);
+      margin: 3rem 0;
+    }
+
+    /* Post-specific theme-aware vars (using the shared tokens from head.html) */
+    :root {
+      --heading-color: var(--on-background);
+      --link-color: var(--primary);
+      --link-underline: var(--outline-variant);
+      --accent-border: var(--primary);
+      --blockquote-color: var(--on-surface-variant);
+      --blockquote-bg: var(--surface-container-low);
+      --code-bg: var(--surface-container);
+      --pre-bg: var(--surface-container);
+      --img-border: var(--outline-variant);
+      --table-border: var(--outline-variant);
+      --hr-color: var(--outline-variant);
+    }
+  </style>
+</head>
+<body class="font-body">
+
+<!-- Navigation -->
+<nav class="fixed top-0 w-full z-50" style="background-color: color-mix(in srgb, var(--surface) 80%, transparent); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); box-shadow: 0 8px 24px rgba(0,0,0,0.06);">
+  <div class="flex justify-between items-center w-full px-6 md:px-8 py-5 max-w-7xl mx-auto">
+    <a href="/" class="font-label text-sm uppercase tracking-widest text-on-surface-variant hover:text-on-background transition-colors duration-300 flex items-center gap-2">
+      <span class="material-symbols-outlined text-[16px]">arrow_back</span>
+      Back to Home
+    </a>
+
+    <div class="flex items-center gap-4">
+      <a href="/#writing" class="hidden md:inline font-label text-sm uppercase tracking-widest text-on-surface-variant hover:text-on-background transition-colors duration-300">All Writing</a>
+      <button id="theme-toggle" class="p-2 rounded-lg transition-colors duration-300 text-on-surface-variant hover:text-on-background" aria-label="Toggle theme">
+        <span class="material-symbols-outlined text-xl theme-icon-light">dark_mode</span>
+        <span class="material-symbols-outlined text-xl theme-icon-dark hidden">light_mode</span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<main class="pt-36 pb-24 px-6 md:px-12 max-w-3xl mx-auto">
+
+  <!-- Post Header -->
+  <header class="mb-12">
+    <div class="flex items-center gap-4 mb-6">
       {% for tag in page.tags %}
-        <span class="tag">{{ tag }}</span>
+      <span class="font-label text-[10px] font-bold uppercase tracking-[0.2em] text-primary">{{ tag }}</span>
+      {% if forloop.last == false %}<span class="w-1 h-1 rounded-full bg-outline-variant"></span>{% endif %}
       {% endfor %}
     </div>
-    {% endif %}
+
+    <h1 class="font-headline text-4xl md:text-5xl lg:text-6xl text-on-background leading-[1.1] mb-6 tracking-tight">{{ page.title }}</h1>
+
+    <div class="flex items-center gap-4 text-on-surface-variant">
+      <span class="font-mono text-[11px] uppercase tracking-[0.15em] opacity-60">{{ page.date | date: "%B %d, %Y" }}</span>
+      <span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+      <span class="font-label text-[11px] uppercase tracking-[0.15em] opacity-60">{{ page.author }}</span>
+    </div>
   </header>
 
   {% if page.cover_image %}
-  <div class="post-cover-image">
-    <img src="{{ page.cover_image | relative_url }}" alt="{{ page.title }}">
+  <div class="mb-12 -mx-6 md:-mx-12 lg:-mx-24">
+    <img src="{{ page.cover_image }}" alt="{{ page.title }}" class="w-full max-h-[500px] object-cover rounded" loading="lazy">
   </div>
   {% endif %}
 
-  <div class="post-content">
+  <!-- Post Content -->
+  <article class="post-content text-on-surface-variant">
     {{ content }}
+  </article>
+
+  <!-- Post Footer -->
+  <footer class="mt-20 pt-12 border-t border-outline-variant/30">
+    <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+      <a href="/#writing" class="font-label text-xs font-bold uppercase tracking-widest text-on-background flex items-center gap-2 border-b border-primary/40 pb-1 hover:border-primary transition-colors">
+        <span class="material-symbols-outlined text-[14px]">arrow_back</span>
+        All Writing
+      </a>
+      <div class="flex flex-wrap gap-2">
+        {% for tag in page.tags %}
+        <span class="bg-surface-container px-2.5 py-1 rounded-full font-mono text-[10px] text-on-surface-variant">{{ tag }}</span>
+        {% endfor %}
+      </div>
+    </div>
+  </footer>
+
+</main>
+
+<!-- Footer -->
+<footer class="w-full mt-20 pt-16 pb-12 bg-surface-container-highest">
+  <div class="flex flex-col md:flex-row justify-between items-center px-6 md:px-12 max-w-7xl mx-auto text-center md:text-left gap-8">
+    <div class="flex flex-col gap-2">
+      <a href="/" class="font-headline italic text-lg text-on-surface-variant hover:text-primary transition-colors">Nicholi Caron</a>
+      <p class="font-label text-xs uppercase tracking-[0.05em] text-on-surface-variant opacity-60">&copy; 2025 Nicholi Caron. Typeset in Newsreader & Inter.</p>
+    </div>
+    <div class="flex gap-8 md:gap-10">
+      <a class="font-label text-xs uppercase tracking-[0.05em] text-on-surface-variant hover:text-primary underline decoration-primary/20 underline-offset-4 transition-all opacity-80 hover:opacity-100" href="https://github.com/nicholicaron" target="_blank" rel="noopener">GitHub</a>
+      <a class="font-label text-xs uppercase tracking-[0.05em] text-on-surface-variant hover:text-primary underline decoration-primary/20 underline-offset-4 transition-all opacity-80 hover:opacity-100" href="https://linkedin.com/in/nicholicaron" target="_blank" rel="noopener">LinkedIn</a>
+      <a class="font-label text-xs uppercase tracking-[0.05em] text-on-surface-variant hover:text-primary underline decoration-primary/20 underline-offset-4 transition-all opacity-80 hover:opacity-100" href="mailto:nicholijcaron@gmail.com">Email</a>
+    </div>
   </div>
-</article>
+</footer>
+
+<script>
+(function() {
+  function setTheme(theme) {
+    document.documentElement.classList.remove('light', 'dark');
+    document.documentElement.classList.add(theme);
+    localStorage.setItem('theme', theme);
+    document.querySelectorAll('.theme-icon-light').forEach(function(el) { el.classList.toggle('hidden', theme === 'dark'); });
+    document.querySelectorAll('.theme-icon-dark').forEach(function(el) { el.classList.toggle('hidden', theme === 'light'); });
+  }
+  var toggleBtn = document.getElementById('theme-toggle');
+  if (toggleBtn) toggleBtn.addEventListener('click', function() { setTheme(document.documentElement.classList.contains('dark') ? 'light' : 'dark'); });
+  var initTheme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.theme-icon-light').forEach(function(el) { el.classList.toggle('hidden', initTheme === 'dark'); });
+    document.querySelectorAll('.theme-icon-dark').forEach(function(el) { el.classList.toggle('hidden', initTheme === 'light'); });
+  });
+})();
+</script>
+
+</body>
+</html>
