@@ -188,7 +188,7 @@ Now add one constraint: $x$ and $y$ must be **integers**. The feasible region is
 </div>
 <p style="text-align: center; font-style: italic; color: var(--on-surface-variant); font-size: 0.9rem; margin-top: -0.5rem;">The same problem with the added constraint that x, y must be integers. The feasible region collapses to a finite set of lattice points.</p>
 
-This particular instance is friendly: the LP optimum landed on a lattice point, so the integer optimum is the same. In general, the LP optimum is some real-valued $(x^*, y^*)$ with fractional coordinates, and the *true* integer optimum is some lattice point nearby — but possibly *far* from $(x^*, y^*)$, with a substantially worse objective value. The gap between the LP optimum and the integer optimum is the **integrality gap**, and bridging it is what makes integer programming hard.
+This particular instance is friendly: the LP optimum landed on a lattice point, so the integer optimum is the same. In general, the LP optimum is some real-valued $(x^\ast, y^\ast)$ with fractional coordinates, and the *true* integer optimum is some lattice point nearby — but possibly *far* from $(x^\ast, y^\ast)$, with a substantially worse objective value. The gap between the LP optimum and the integer optimum is the **integrality gap**, and bridging it is what makes integer programming hard.
 
 How hard? **NP-hard**. There is no known polynomial-time algorithm for general MILP, and the consensus assumption (P ≠ NP) is that there isn't one. The number of integer points inside the feasible region grows combinatorially with the number of variables: a problem with $n$ binary variables has up to $2^n$ candidate solutions. At $n=50$ you've already exceeded the lifetime of the universe at one nanosecond per check.
 

@@ -471,7 +471,7 @@
     <!-- Featured post — curated highlight -->
     {% assign featured = nil %}
     {% for post in site.posts %}
-      {% if post.title == "Branch-and-Bound from First Principles" %}{% assign featured = post %}{% endif %}
+      {% if post.title == "CHOP: A Research Diary in Learning to Branch" %}{% assign featured = post %}{% endif %}
     {% endfor %}
     <div class="mb-20">
       <div class="bg-surface-container-low p-10 md:p-16 relative overflow-hidden group border border-outline-variant/30 rounded">
@@ -503,7 +503,7 @@
 
     <!-- Curated selection + browse link -->
     {% comment %}Hand-picked posts for variety across categories{% endcomment %}
-    {% assign showcase_titles = "Convolutions of Grandeur|Modern Algebra II: Rings, Ideals, and Quotient Rings|Compiler Design & Implementation|Autodifferentiation|Why Rust?" | split: "|" %}
+    {% assign showcase_titles = "Convolutions of Grandeur|Branch-and-Bound from First Principles|Compiler Design & Implementation|Autodifferentiation|Why Rust?" | split: "|" %}
     {% assign showcase_posts = "" | split: "" %}
     {% for title in showcase_titles %}
       {% for post in site.posts %}
