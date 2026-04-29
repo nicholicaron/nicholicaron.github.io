@@ -3,7 +3,7 @@ layout: post
 title: "CHOP: A Research Diary in Learning to Branch"
 date: 2026-04-28 17:00:00 -0400
 tags: [Optimization, GNNs, Reinforcement Learning, AI, MILP]
-cover_image: /assets/images/chop/benchmark_all.png
+cover_image: /assets/images/chop/peutinger-table-map-1619.jpg
 ---
 
 In [Part 1]({{ site.url }}/2026/04/28/branch-and-bound-from-first-principles.html) we ended on a question: when the textbook node-selection heuristic — best-bound — explores roughly twice as many nodes as the alternatives on Set Cover, can we *learn* a heuristic that beats all of them? This post is the answer, but before we dive into the *how*, it's worth slowing down on *why this question is interesting at all*. The "neural networks for NP-hard problems" framing sounds like marketing if you haven't seen the underlying intuition. The intuition turns out to be solid, and a single picture explains it.
