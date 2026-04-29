@@ -417,9 +417,14 @@
           <span class="bg-surface-container px-2.5 py-1 rounded-full font-mono text-[10px] text-on-surface-variant">Reinforcement Learning</span>
           <span class="bg-surface-container px-2.5 py-1 rounded-full font-mono text-[10px] text-on-surface-variant">PyTorch</span>
         </div>
-        <a href="https://github.com/nicholicaron" target="_blank" rel="noopener" class="font-label text-[10px] font-bold uppercase tracking-widest text-on-background flex items-center gap-2 border-b border-transparent hover:border-primary w-fit pb-1 transition-all">
-          View on GitHub <span class="material-symbols-outlined text-[14px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
-        </a>
+        <div class="flex flex-wrap gap-x-6 gap-y-2 items-center">
+          <a href="/2026/04/28/branch-and-bound-from-first-principles.html" class="font-label text-[10px] font-bold uppercase tracking-widest text-on-background flex items-center gap-2 border-b border-transparent hover:border-primary w-fit pb-1 transition-all">
+            Read the Essays <span class="material-symbols-outlined text-[14px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+          </a>
+          <a href="https://github.com/nicholicaron/chop" target="_blank" rel="noopener" class="font-label text-[10px] font-bold uppercase tracking-widest text-on-surface-variant flex items-center gap-2 border-b border-transparent hover:border-on-background w-fit pb-1 transition-all">
+            GitHub <span class="material-symbols-outlined text-[14px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+          </a>
+        </div>
       </article>
 
       <!-- Predictive Maintenance -->
@@ -466,7 +471,7 @@
     <!-- Featured post — curated highlight -->
     {% assign featured = nil %}
     {% for post in site.posts %}
-      {% if post.title == "Take Heed of the Hydra" %}{% assign featured = post %}{% endif %}
+      {% if post.title == "Branch-and-Bound from First Principles" %}{% assign featured = post %}{% endif %}
     {% endfor %}
     <div class="mb-20">
       <div class="bg-surface-container-low p-10 md:p-16 relative overflow-hidden group border border-outline-variant/30 rounded">
