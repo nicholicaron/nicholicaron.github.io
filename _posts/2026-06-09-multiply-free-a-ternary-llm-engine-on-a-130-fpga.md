@@ -53,14 +53,6 @@ A preview of the result, for the impatient:
   </g>
   <text x="30" y="215" font-size="11" fill="currentColor" opacity="0.75" transform="rotate(-90 30 215)" text-anchor="middle">joules / token</text>
 
-  <!-- GPU reference line at 3.67 -> y = 380 - 3.67*66 = 137.8 -->
-  <line x1="90" y1="137.8" x2="640" y2="137.8" stroke="var(--primary, #94452b)" stroke-width="1.5" stroke-dasharray="6,4" opacity="0.9"/>
-  <text x="636" y="131" text-anchor="end" font-size="10.5" font-weight="600" fill="var(--primary, #94452b)">RTX 3060 — 3.67 J/tok · the line to beat</text>
-
-  <!-- CPU reference (faint) at 4.62 -> y = 75.1 -->
-  <line x1="90" y1="75.1" x2="640" y2="75.1" stroke="currentColor" stroke-width="1" stroke-dasharray="2,3" opacity="0.35"/>
-  <text x="636" y="69" text-anchor="end" font-size="9.5" fill="currentColor" opacity="0.5">CPU 5950X — 4.62</text>
-
   <!-- Bars: centers 170,310,450,590 ; width 70 ; baseline y=380 ; y(v)=380-66v -->
   <!-- Bar 1: host-split 4.32 -> top 94.9 (ABOVE the GPU line: loses) -->
   <rect x="135" y="94.9" width="70" height="285.1" rx="3" fill="var(--error, #a64542)" opacity="0.78"/>
@@ -89,6 +81,12 @@ A preview of the result, for the impatient:
   <text x="590" y="398" text-anchor="middle" font-size="10" fill="currentColor" opacity="0.8">engine</text>
   <text x="590" y="411" text-anchor="middle" font-size="9" fill="currentColor" opacity="0.55">bound</text>
   <text x="590" y="426" text-anchor="middle" font-size="9.5" font-weight="600" fill="var(--primary, #94452b)" opacity="0.7">2.5× (proj.)</text>
+
+  <!-- reference lines drawn ON TOP of the bars so the host-split bar's crossing reads clearly -->
+  <line x1="90" y1="75.1" x2="640" y2="75.1" stroke="currentColor" stroke-width="1" stroke-dasharray="2,3" opacity="0.35"/>
+  <text x="636" y="69" text-anchor="end" font-size="9.5" fill="currentColor" opacity="0.55">CPU 5950X — 4.62</text>
+  <line x1="90" y1="137.8" x2="640" y2="137.8" stroke="var(--primary, #94452b)" stroke-width="1.6" stroke-dasharray="6,4"/>
+  <text x="636" y="131" text-anchor="end" font-size="10.5" font-weight="600" fill="var(--primary, #94452b)">RTX 3060 — 3.67 J/tok · the line to beat</text>
 </svg>
 </div>
 <p style="text-align: center; font-style: italic; color: var(--on-surface-variant); font-size: 0.9rem; margin-top: -0.5rem;">The arc of the whole project in one figure. The naive design (left, red) loses to the GPU by 1.2×. Each subsequent bar moves a piece of non-ternary "glue" computation from the slow host CPU onto the FPGA fabric; the system drops below the GPU line and keeps falling toward the engine's own 1.47 J/token floor. The first three FPGA bars are derived from silicon-measured cycle counts; the rightmost is a projection.</p>
@@ -125,7 +123,7 @@ This is what a **roofline** model makes visible:
   <!-- Compute-bound flat roof: from knee (330,100) to (620,100) -->
   <line x1="330" y1="100" x2="620" y2="100" stroke="var(--primary, #94452b)" stroke-width="2.5"/>
   <text x="150" y="232" font-size="10" fill="var(--primary, #94452b)" font-style="italic" transform="rotate(-43 150 232)">memory-bandwidth roof</text>
-  <text x="470" y="92" text-anchor="middle" font-size="10" fill="var(--primary, #94452b)" font-style="italic">compute roof (tensor cores)</text>
+  <text x="478" y="88" text-anchor="middle" font-size="10" fill="var(--primary, #94452b)" font-style="italic">compute roof (tensor cores)</text>
 
   <!-- Shaded memory-bound region -->
   <path d="M 80 330 L 330 100 L 330 330 Z" fill="var(--primary, #94452b)" opacity="0.07"/>
@@ -139,10 +137,10 @@ This is what a **roofline** model makes visible:
   <text x="148" y="286" font-size="9.5" fill="currentColor" opacity="0.7">one token = stream every weight once</text>
   <text x="148" y="299" font-size="9.5" fill="currentColor" opacity="0.7">≈ 1 FLOP / byte</text>
 
-  <!-- training/batched marker near the knee -->
+  <!-- training/batched marker at the knee; labels BELOW the line so they don't collide with the roof label -->
   <circle cx="360" cy="100" r="5" fill="none" stroke="currentColor" stroke-width="1.5"/>
-  <text x="372" y="96" font-size="10" fill="currentColor" opacity="0.7">training / large batch</text>
-  <text x="372" y="110" font-size="9.5" fill="currentColor" opacity="0.5">reuse weights → compute-bound</text>
+  <text x="420" y="122" text-anchor="middle" font-size="10" fill="currentColor" opacity="0.7">training / large batch</text>
+  <text x="420" y="135" text-anchor="middle" font-size="9.5" fill="currentColor" opacity="0.5">reuse weights → compute-bound</text>
 
   <!-- Annotation: the wasted ceiling -->
   <line x1="135" y1="270" x2="135" y2="112" stroke="currentColor" stroke-width="0.8" stroke-dasharray="2,2" opacity="0.4"/>
@@ -438,10 +436,10 @@ The second measurement was sparsity. Direction "skip the zeros" needs zeros to s
 Phase 2 also turned up a small piece of mathematics I find genuinely lovely. The feed-forward block computes, per channel, $\text{relu}(\text{gate})^2 \cdot \text{up}$, normalizes it, and feeds the result — requantized to int8 — into the final projection. That requantization looks like it needs floating-point: dequantize the integer matmul outputs by their per-token scales, apply the RMSNorm divide, then re-quantize. But the int8 value that actually reaches the next matmul is
 
 $$
-h_{q,i} \;=\; \text{round}\!\left(\frac{127 \, N_i}{\max_j |N_j|}\right), \qquad N_i = \text{relu}(g_i)^2 \cdot u_i \cdot w_i
+h_{q,i} \;=\; \text{round}\!\left(\frac{127 \, N_i}{\max_j \lvert N_j \rvert}\right), \qquad N_i = \text{relu}(g_i)^2 \cdot u_i \cdot w_i
 $$
 
-where $g_i$ and $u_i$ are the *integer* gate and up outputs and $w_i$ is a fixed-point norm weight. The requantization is a **ratio** — $N_i$ over the maximum $|N|$ — and every per-token dequant scale and the entire RMSNorm normalizer are common positive factors that appear in both the numerator and the denominator. **They cancel, exactly.** The "hard" floating-point glue between the matmuls is, on-chip, pure integer arithmetic plus a single reciprocal. I verified this against the validated reference: with floating-point norm weights it is a **100.00% exact match**; with 16-bit fixed-point weights, 99.99% (off by at most 1). That identity is what later makes an on-fabric glue unit clean instead of nightmarish.
+where $g_i$ and $u_i$ are the *integer* gate and up outputs and $w_i$ is a fixed-point norm weight. The requantization is a **ratio** — $N_i$ over the maximum $\lvert N \rvert$ — and every per-token dequant scale and the entire RMSNorm normalizer are common positive factors that appear in both the numerator and the denominator. **They cancel, exactly.** The "hard" floating-point glue between the matmuls is, on-chip, pure integer arithmetic plus a single reciprocal. I verified this against the validated reference: with floating-point norm weights it is a **100.00% exact match**; with 16-bit fixed-point weights, 99.99% (off by at most 1). That identity is what later makes an on-fabric glue unit clean instead of nightmarish.
 
 ### Phase 3 — the projection, and two risks named out loud
 
@@ -492,7 +490,7 @@ MEASURED attention cycles/query = 16456  (T=64, D=128)
 
 ### Phases 7 & 8 — the last big glue term, and the bug that came back a third time
 
-With attention handled, the largest remaining host term was the FFN inter-projection glue — the $\text{relu}(\text{gate})^2 \cdot \text{up} \cdot w$ and int8 requantization from Phase 2, 2.58M cycles a layer on the host. The `ffn_glue_unit` does it on-fabric in two passes: compute every $N_i$ and track the running maximum $|N|$, then requantize. The requantization needs a divide by $\max|N|$ per channel, which I did *not* want to instantiate 6,912 times. The trick: compute **one** reciprocal per call — $\text{recip} = (127 \ll R) / \max|N|$ with $R$ chosen so the reciprocal lands in a fixed 32-bit window — using a single restoring divider, then each channel's requant is a multiply and a shift, $h_{q,i} = (|N_i| \cdot \text{recip} \gg R) \cdot \text{sign}$. One divide, reused across all channels.
+With attention handled, the largest remaining host term was the FFN inter-projection glue — the $\text{relu}(\text{gate})^2 \cdot \text{up} \cdot w$ and int8 requantization from Phase 2, 2.58M cycles a layer on the host. The `ffn_glue_unit` does it on-fabric in two passes: compute every $N_i$ and track the running maximum $\lvert N \rvert$, then requantize. The requantization needs a divide by $\max \lvert N \rvert$ per channel, which I did *not* want to instantiate 6,912 times. The trick: compute **one** reciprocal per call — $\text{recip} = (127 \ll R) / \max \lvert N \rvert$ with $R$ chosen so the reciprocal lands in a fixed 32-bit window — using a single restoring divider, then each channel's requant is a multiply and a shift, $h_{q,i} = (\lvert N_i \rvert \cdot \text{recip} \gg R) \cdot \text{sign}$. One divide, reused across all channels.
 
 Bit-exact against the oracle, ~165× faster than the host glue. And then synthesis came back at **115% of the LUTs and 134% of the flip-flops** — it didn't fit at all. The cause was the bug from Phase 2 and Phase 5, for the third time: the output memory `hqmem` had its *write* in one always-block and its *read* in another, so the tool couldn't infer a block RAM and instead built a 6,912-deep array of flip-flops plus an address decoder. Putting the write and read in the **same clock-only block** turned it into a proper simple-dual-port BRAM, and usage dropped to **7% LUT / 1% FF / 40% BRAM / 19 DSP**. Three times this exact mistake cost me a synthesis run; it is now the first thing I check when utilization looks insane. (The lesson, stated generally: *a memory whose read and write live in different procedural blocks will not infer as BRAM.* Tattoo it somewhere.)
 
@@ -537,10 +535,6 @@ COMBINED_ONBOARD_PASS  (engine -> ffn_glue, 32 h_q bit-exact, ffn-glue 214 cyc)
   </g>
   <text x="34" y="195" font-size="10.5" fill="currentColor" opacity="0.7" transform="rotate(-90 34 195)" text-anchor="middle">BRAM tiles used</text>
 
-  <!-- 50-tile budget line: y = 330 - 200 = 130 -->
-  <line x1="90" y1="130" x2="520" y2="130" stroke="var(--error, #a64542)" stroke-width="1.6" stroke-dasharray="7,4"/>
-  <text x="516" y="123" text-anchor="end" font-size="10.5" font-weight="600" fill="var(--error, #a64542)">50-tile budget</text>
-
   <!-- Bar 1: the proven pair (45). center x=200, width 110. SoC+engine 27, ffn-glue 18 -->
   <!-- SoC+engine 0..27: y 330..222, h=108 -->
   <rect x="145" y="222" width="110" height="108" fill="var(--primary, #94452b)" opacity="0.45" stroke="var(--primary,#94452b)" stroke-width="0.8"/>
@@ -566,6 +560,10 @@ COMBINED_ONBOARD_PASS  (engine -> ffn_glue, 32 h_q bit-exact, ffn-glue 214 cyc)
   <text x="400" y="70" text-anchor="middle" font-size="11" font-weight="700" fill="var(--error, #a64542)">63 ✗</text>
   <text x="400" y="350" text-anchor="middle" font-size="10" font-weight="600" fill="currentColor">all three</text>
   <text x="400" y="364" text-anchor="middle" font-size="9" fill="var(--error, #a64542)">over budget — needs tiling / bigger board</text>
+
+  <!-- budget line drawn ON TOP of the bars so the attention bar's crossing reads clearly -->
+  <line x1="90" y1="130" x2="520" y2="130" stroke="var(--error, #a64542)" stroke-width="1.8" stroke-dasharray="7,4"/>
+  <text x="516" y="123" text-anchor="end" font-size="10.5" font-weight="600" fill="var(--error, #a64542)">50-tile budget</text>
 </svg>
 </div>
 <p style="text-align: center; font-style: italic; color: var(--on-surface-variant); font-size: 0.9rem; margin-top: -0.5rem;">The frontier, measured. The ternary engine and the full-width FFN-glue unit, plus the supporting CPU/DRAM system, fit a 35T at 45 of its 50 block-RAM tiles — built and verified. Adding the attention unit's ~18 tiles would need 63, over the budget. The full three-accelerator decode loop wants either FFN tiling or a board with more on-chip memory (a 250-dollar A7-100T, or a Zynq KV260).</p>
