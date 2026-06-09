@@ -300,6 +300,64 @@ And it does so at a power level a GPU cannot approach. The whole system-on-chip 
 
 Let me be honest about the other side of the ledger, because it matters: **the FPGA loses on raw throughput, by design and by a lot.** With ~280× less memory bandwidth than the 3060, it will generate tokens more slowly. This project never claims a "40× faster" headline — that would be dishonest. The claim is narrower and, I think, more interesting: on **energy per token**, **batch-1 latency**, and a **capability the GPU lacks** (native ternary, per-token unstructured sparsity), a 130-dollar board can beat a 400-dollar GPU. Those are the axes that matter at the edge, where there is no datacenter to batch your requests and the power budget is a wall, not a line item.
 
+<div style="overflow-x: auto; margin: 2rem 0;">
+<svg viewBox="0 0 660 440" width="660" height="440" xmlns="http://www.w3.org/2000/svg" style="display: block; margin: 0 auto; font-family: 'Inter', sans-serif; max-width: 100%;">
+  <defs>
+    <marker id="sc-arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="var(--primary, #94452b)"/></marker>
+  </defs>
+  <text x="330" y="24" text-anchor="middle" font-size="13" font-weight="600" fill="currentColor">The honest tradeoff — energy vs throughput</text>
+  <text x="330" y="41" text-anchor="middle" font-size="10.5" fill="currentColor" opacity="0.6">batch-1 decode, BitNet-2B-4T. The FPGA wins energy; it concedes throughput, by design.</text>
+
+  <!-- Axes: X = tok/s (log), Y = J/token (linear 0..5). baseline y=370, top y=60. -->
+  <line x1="90" y1="60" x2="90" y2="370" stroke="currentColor" stroke-width="1.1"/>
+  <line x1="90" y1="370" x2="630" y2="370" stroke="currentColor" stroke-width="1.1"/>
+  <!-- Y ticks 0..5 (62 px/J) -->
+  <g font-size="10" fill="currentColor" opacity="0.6">
+    <text x="83" y="374" text-anchor="end">0</text>
+    <text x="83" y="312" text-anchor="end">1</text>
+    <text x="83" y="250" text-anchor="end">2</text>
+    <text x="83" y="188" text-anchor="end">3</text>
+    <text x="83" y="126" text-anchor="end">4</text>
+    <text x="83" y="64"  text-anchor="end">5</text>
+  </g>
+  <text x="34" y="215" font-size="11" fill="currentColor" opacity="0.75" transform="rotate(-90 34 215)" text-anchor="middle">energy (J / token)</text>
+  <text x="58" y="200" font-size="9" fill="currentColor" opacity="0.5" transform="rotate(-90 58 200)" text-anchor="middle">← lower is better</text>
+  <!-- X ticks: 0.3,1,3,10,30 tok/s (log) -->
+  <g font-size="10" fill="currentColor" opacity="0.6" text-anchor="middle">
+    <text x="108.5" y="386">0.3</text>
+    <text x="234.5" y="386">1</text>
+    <text x="349.5" y="386">3</text>
+    <text x="475.5" y="386">10</text>
+    <text x="590.4" y="386">30</text>
+  </g>
+  <text x="360" y="408" text-anchor="middle" font-size="11" fill="currentColor" opacity="0.75" font-style="italic">throughput (tokens / second) — log scale →</text>
+
+  <!-- GPU energy reference line at 3.67 -> y=142.5 -->
+  <line x1="90" y1="142.5" x2="630" y2="142.5" stroke="var(--primary, #94452b)" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/>
+
+  <!-- FPGA point (0.3 tok/s, 1.62 J) -> (108.5, 269.6) + widen-K arrow to 3 tok/s -->
+  <line x1="120" y1="269.6" x2="345" y2="269.6" stroke="var(--primary, #94452b)" stroke-width="1.4" stroke-dasharray="5,3" marker-end="url(#sc-arrow)" opacity="0.8"/>
+  <text x="234" y="262" text-anchor="middle" font-size="9.5" fill="var(--primary, #94452b)" opacity="0.85">widen K → ~3 tok/s, same energy</text>
+  <circle cx="108.5" cy="269.6" r="7" fill="var(--primary, #94452b)" stroke="white" stroke-width="2"/>
+  <text x="116" y="289" font-size="11" font-weight="600" fill="var(--primary, #94452b)">FPGA (Arty A7)</text>
+  <text x="116" y="303" font-size="9.5" fill="currentColor" opacity="0.7">1.62 J/tok · derived · sub-watt</text>
+
+  <!-- GPU point (23.5, 3.67) -> (565, 142.5) -->
+  <circle cx="565" cy="142.5" r="7" fill="none" stroke="currentColor" stroke-width="2"/>
+  <text x="556" y="138" text-anchor="end" font-size="11" font-weight="600" fill="currentColor">RTX 3060</text>
+  <text x="556" y="152" text-anchor="end" font-size="9.5" fill="currentColor" opacity="0.7">3.67 J/tok · 86 W · measured</text>
+
+  <!-- CPU point (28.4, 4.62) -> (584.6, 83.6) -->
+  <circle cx="584.6" cy="83.6" r="7" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.6"/>
+  <text x="575" y="79" text-anchor="end" font-size="10.5" font-weight="600" fill="currentColor" opacity="0.75">CPU 5950X</text>
+  <text x="575" y="93" text-anchor="end" font-size="9.5" fill="currentColor" opacity="0.55">4.62 J/tok · 121 W</text>
+
+  <!-- region note -->
+  <text x="360" y="335" text-anchor="middle" font-size="9.5" fill="currentColor" opacity="0.45" font-style="italic">CPU and GPU cluster top-right: fast, but power-hungry. The FPGA trades that for the bottom-left.</text>
+</svg>
+</div>
+<p style="text-align: center; font-style: italic; color: var(--on-surface-variant); font-size: 0.9rem; margin-top: -0.5rem;">The whole thesis on two axes. The CPU and GPU sit top-right — high throughput, high energy. The FPGA sits low (less than half the GPU's joules per token) and far left (slow). Crucially, energy per token is roughly invariant to the engine width, so widening the datapath slides the FPGA point <em>rightward</em> — more tokens per second at the same energy — rather than down. Throughput is a dial you can turn; the energy floor is the structural win. CPU/GPU points measured; the FPGA point derived from silicon-measured primitives.</p>
+
 That is the case on paper. The rest of this post is what happened when I tried to build it.
 
 ---
@@ -468,6 +526,80 @@ That is a real result, measured on real silicon, and it said the design was wron
 
 The losing number was the most valuable measurement in the project. It converted an architectural opinion — "attention should be on the fabric" — into a quantified necessity, and it set the agenda for everything that followed. The next three phases are the climb back up the first figure in this post.
 
+Here is the layer the climb produces — every operation tinted by where it ends up running. The terracotta and green are silicon; only the thin grey blocks stay on the soft CPU:
+
+<div style="overflow-x: auto; margin: 2rem 0;">
+<svg viewBox="0 0 700 644" width="700" height="644" xmlns="http://www.w3.org/2000/svg" style="display: block; margin: 0 auto; font-family: 'Inter', sans-serif; max-width: 100%;">
+  <defs>
+    <marker id="ly-arrow" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0, 7 2.5, 0 5" fill="currentColor"/></marker>
+  </defs>
+
+  <!-- Legend -->
+  <g font-size="10.5">
+    <rect x="92"  y="14" width="13" height="13" rx="3" fill="var(--primary, #94452b)" opacity="0.85"/><text x="111" y="24" fill="currentColor">ternary engine · 0 DSP</text>
+    <rect x="300" y="14" width="13" height="13" rx="3" fill="#2e8b57"/><text x="319" y="24" fill="currentColor">on-fabric unit</text>
+    <rect x="450" y="14" width="13" height="13" rx="3" fill="var(--surface-container, #f3f0eb)" stroke="var(--outline-variant, #dbc1ba)" stroke-width="1"/><text x="469" y="24" fill="currentColor">host CPU (VexRiscv)</text>
+  </g>
+
+  <!-- residual spine -->
+  <text x="90" y="52" text-anchor="middle" font-size="9.5" fill="currentColor" opacity="0.6">hidden state</text>
+  <line x1="90" y1="58" x2="90" y2="600" stroke="currentColor" stroke-width="1.6" marker-end="url(#ly-arrow)"/>
+  <text x="90" y="624" text-anchor="middle" font-size="9.5" fill="currentColor" opacity="0.6">hidden state out</text>
+
+  <!-- sublayer labels -->
+  <text x="266" y="210" text-anchor="middle" font-size="10" font-weight="600" fill="currentColor" opacity="0.5" transform="rotate(-90 266 210)" letter-spacing="2">ATTENTION</text>
+  <text x="266" y="455" text-anchor="middle" font-size="10" font-weight="600" fill="currentColor" opacity="0.5" transform="rotate(-90 266 455)" letter-spacing="2">FFN</text>
+
+  <!-- branch arrows in -->
+  <circle cx="90" cy="105" r="3" fill="currentColor"/>
+  <line x1="90" y1="105" x2="288" y2="105" stroke="currentColor" stroke-width="1.3" marker-end="url(#ly-arrow)"/>
+  <circle cx="90" cy="391" r="3" fill="currentColor"/>
+  <line x1="90" y1="391" x2="288" y2="391" stroke="currentColor" stroke-width="1.3" marker-end="url(#ly-arrow)"/>
+
+  <!-- ATTENTION pills (x 290..530, w240 h30) -->
+  <rect x="290" y="90"  width="240" height="30" rx="6" fill="var(--surface-container, #f3f0eb)" stroke="var(--outline-variant, #dbc1ba)" stroke-width="1"/><text x="410" y="109" text-anchor="middle" font-size="11" fill="currentColor">RMSNorm — input</text>
+  <rect x="290" y="132" width="240" height="30" rx="6" fill="var(--primary, #94452b)" opacity="0.85"/><text x="410" y="151" text-anchor="middle" font-size="11" fill="white">Q · K · V projection</text>
+  <rect x="290" y="174" width="240" height="30" rx="6" fill="var(--surface-container, #f3f0eb)" stroke="var(--outline-variant, #dbc1ba)" stroke-width="1"/><text x="410" y="193" text-anchor="middle" font-size="11" fill="currentColor">RoPE (rotary position)</text>
+  <rect x="290" y="216" width="240" height="30" rx="6" fill="#2e8b57"/><text x="410" y="235" text-anchor="middle" font-size="11" fill="white">scores · softmax · a·V</text>
+  <rect x="290" y="258" width="240" height="30" rx="6" fill="var(--surface-container, #f3f0eb)" stroke="var(--outline-variant, #dbc1ba)" stroke-width="1"/><text x="410" y="277" text-anchor="middle" font-size="11" fill="currentColor">attn sub-norm</text>
+  <rect x="290" y="300" width="240" height="30" rx="6" fill="var(--primary, #94452b)" opacity="0.85"/><text x="410" y="319" text-anchor="middle" font-size="11" fill="white">O projection</text>
+  <!-- attention down-arrows -->
+  <g stroke="currentColor" stroke-width="1.2" opacity="0.55">
+    <line x1="410" y1="120" x2="410" y2="131" marker-end="url(#ly-arrow)"/>
+    <line x1="410" y1="162" x2="410" y2="173" marker-end="url(#ly-arrow)"/>
+    <line x1="410" y1="204" x2="410" y2="215" marker-end="url(#ly-arrow)"/>
+    <line x1="410" y1="246" x2="410" y2="257" marker-end="url(#ly-arrow)"/>
+    <line x1="410" y1="288" x2="410" y2="299" marker-end="url(#ly-arrow)"/>
+  </g>
+  <!-- attention merge to + -->
+  <line x1="410" y1="330" x2="410" y2="352" stroke="currentColor" stroke-width="1.2" opacity="0.55"/>
+  <line x1="410" y1="352" x2="103" y2="352" stroke="currentColor" stroke-width="1.2" opacity="0.55" marker-end="url(#ly-arrow)"/>
+  <circle cx="90" cy="352" r="11" fill="var(--surface, #fcf9f4)" stroke="currentColor" stroke-width="1.4"/><text x="90" y="356" text-anchor="middle" font-size="14" fill="currentColor">+</text>
+
+  <!-- FFN pills -->
+  <rect x="290" y="376" width="240" height="30" rx="6" fill="var(--surface-container, #f3f0eb)" stroke="var(--outline-variant, #dbc1ba)" stroke-width="1"/><text x="410" y="395" text-anchor="middle" font-size="11" fill="currentColor">RMSNorm — post-attention</text>
+  <rect x="290" y="418" width="240" height="30" rx="6" fill="var(--primary, #94452b)" opacity="0.85"/><text x="410" y="437" text-anchor="middle" font-size="11" fill="white">gate · up projection</text>
+  <rect x="290" y="460" width="240" height="30" rx="6" fill="#2e8b57"/><text x="410" y="479" text-anchor="middle" font-size="10.5" fill="white">squared-ReLU · glue · int8 requant</text>
+  <rect x="290" y="502" width="240" height="30" rx="6" fill="var(--primary, #94452b)" opacity="0.85"/><text x="410" y="521" text-anchor="middle" font-size="11" fill="white">down projection</text>
+  <!-- FFN down-arrows -->
+  <g stroke="currentColor" stroke-width="1.2" opacity="0.55">
+    <line x1="410" y1="406" x2="410" y2="417" marker-end="url(#ly-arrow)"/>
+    <line x1="410" y1="448" x2="410" y2="459" marker-end="url(#ly-arrow)"/>
+    <line x1="410" y1="490" x2="410" y2="501" marker-end="url(#ly-arrow)"/>
+  </g>
+  <!-- FFN merge to + -->
+  <line x1="410" y1="532" x2="410" y2="554" stroke="currentColor" stroke-width="1.2" opacity="0.55"/>
+  <line x1="410" y1="554" x2="103" y2="554" stroke="currentColor" stroke-width="1.2" opacity="0.55" marker-end="url(#ly-arrow)"/>
+  <circle cx="90" cy="554" r="11" fill="var(--surface, #fcf9f4)" stroke="currentColor" stroke-width="1.4"/><text x="90" y="558" text-anchor="middle" font-size="14" fill="currentColor">+</text>
+
+  <!-- counts note -->
+  <text x="590" y="151" text-anchor="middle" font-size="9" fill="currentColor" opacity="0.5">×3</text>
+  <text x="640" y="320" text-anchor="end" font-size="9" fill="currentColor" opacity="0.45">7 ternary GEMVs</text>
+  <text x="640" y="333" text-anchor="end" font-size="9" fill="currentColor" opacity="0.45">per layer, all 0 DSP</text>
+</svg>
+</div>
+<p style="text-align: center; font-style: italic; color: var(--on-surface-variant); font-size: 0.9rem; margin-top: -0.5rem;">One BitNet decoder layer, with each operation colored by where it runs in the final design. The seven matrix multiplies (Q/K/V/O and gate/up/down) are ternary GEMVs on the 0-DSP engine; attention and the FFN glue become dedicated on-fabric units over Phases 5–8; only the RMSNorms and RoPE — the thin grey blocks, ~0.6M cycles a layer — stay on the host CPU. The arrows down the left spine are the residual stream; the ⊕ are the residual adds. This is the picture the next four phases assemble.</p>
+
 ### Phases 5 & 6 — attention onto the fabric, and the verdict flips
 
 If the CPU is a bad place to do attention, the fix is to build attention in hardware. The `attention_unit` keeps the key and value cache in on-chip BRAM and, for one query, computes the scores (an int16 multiply-accumulate against each cached key), turns them into a softmax, and produces the weighted sum over the values. The softmax is the interesting part, because a naive softmax wants floating-point exponentials and a division. I avoided both:
@@ -504,6 +636,71 @@ MEASURED ffn-glue cycles/layer = 13974  (F=6912)  →  184× vs host
 **Bit-exact on the board at the real FFN width**, a 184× collapse. (The measured 13,974 is *more* trustworthy than the simulation's earlier 15.6K extrapolation, which had double-counted a per-pass drain — measuring the real thing beat extrapolating from a small one.) The system energy fell to **1.62 J/token, ~2.3× under the GPU** — the third bar in the opening figure. With both big terms on the fabric, the engine is now **90% of the layer**, and the largest thing left is the pair of RMSNorm operations at 0.54M cycles — the gap between the 1.62 bar and the 1.47 engine floor.
 
 The bookkeeping milestone of Phase 8: **three of the system's four cycle terms — the engine, attention, and the FFN glue — are now silicon-measured.** Only the RMSNorm and the fully-integrated loop remain projections.
+
+Here is the whole arc in cycles rather than joules — the *mechanism* underneath the energy ladder from the top of the post:
+
+<div style="overflow-x: auto; margin: 2rem 0;">
+<svg viewBox="0 0 680 470" width="680" height="470" xmlns="http://www.w3.org/2000/svg" style="display: block; margin: 0 auto; font-family: 'Inter', sans-serif; max-width: 100%;">
+  <text x="340" y="24" text-anchor="middle" font-size="13" font-weight="600" fill="currentColor">Where the cycles go — one BitNet-2B layer</text>
+  <text x="340" y="41" text-anchor="middle" font-size="10.5" fill="currentColor" opacity="0.6">Engine work is fixed; moving glue onto the fabric collapses the dominant term. The engine's share rises 31% → 71% → 90%.</text>
+
+  <!-- Y axis 0..30M, baseline y=390, top y=55, 11.17 px/M -->
+  <line x1="90" y1="55" x2="90" y2="390" stroke="currentColor" stroke-width="1.1"/>
+  <g stroke="currentColor" stroke-width="0.5" opacity="0.16">
+    <line x1="90" y1="390" x2="650" y2="390"/>
+    <line x1="90" y1="278.3" x2="650" y2="278.3"/>
+    <line x1="90" y1="166.6" x2="650" y2="166.6"/>
+    <line x1="90" y1="55" x2="650" y2="55"/>
+  </g>
+  <g font-size="10" fill="currentColor" opacity="0.6">
+    <text x="83" y="394" text-anchor="end">0</text>
+    <text x="83" y="282" text-anchor="end">10M</text>
+    <text x="83" y="170" text-anchor="end">20M</text>
+    <text x="83" y="59" text-anchor="end">30M</text>
+  </g>
+  <text x="34" y="222" font-size="11" fill="currentColor" opacity="0.75" transform="rotate(-90 34 222)" text-anchor="middle">cycles / layer</text>
+
+  <!-- BAR 1: host-split (center 200, w=95 -> x 152.5) -->
+  <rect x="152.5" y="293.1" width="95" height="96.9" fill="var(--primary, #94452b)" opacity="0.9"/>
+  <rect x="152.5" y="112.0" width="95" height="181.1" fill="var(--error, #a64542)" opacity="0.82"/>
+  <rect x="152.5" y="83.2"  width="95" height="28.8"  fill="var(--primary, #94452b)" opacity="0.45"/>
+  <rect x="152.5" y="76.3"  width="95" height="6.9"   fill="#6b7180" opacity="0.7"/>
+  <text x="200" y="70" text-anchor="middle" font-size="11" font-weight="700" fill="currentColor">28.1M → 4.32 J</text>
+  <text x="200" y="206" text-anchor="middle" font-size="10.5" fill="white" opacity="0.9">attention</text>
+  <text x="200" y="345" text-anchor="middle" font-size="11" font-weight="700" fill="white">31%</text>
+
+  <!-- BAR 2: + on-fabric attention (center 380) -->
+  <rect x="332.5" y="293.1" width="95" height="96.9" fill="var(--primary, #94452b)" opacity="0.9"/>
+  <rect x="332.5" y="289.4" width="95" height="3.7"  fill="var(--error, #a64542)" opacity="0.82"/>
+  <rect x="332.5" y="260.6" width="95" height="28.8" fill="var(--primary, #94452b)" opacity="0.45"/>
+  <rect x="332.5" y="253.7" width="95" height="6.9"  fill="#6b7180" opacity="0.7"/>
+  <text x="380" y="247" text-anchor="middle" font-size="11" font-weight="700" fill="currentColor">12.2M → 1.99 J</text>
+  <text x="380" y="345" text-anchor="middle" font-size="11" font-weight="700" fill="white">71%</text>
+
+  <!-- BAR 3: + on-fabric FFN glue (center 560) -->
+  <rect x="512.5" y="293.1" width="95" height="96.9" fill="var(--primary, #94452b)" opacity="0.9"/>
+  <rect x="512.5" y="289.4" width="95" height="3.7"  fill="var(--error, #a64542)" opacity="0.82"/>
+  <rect x="512.5" y="282.3" width="95" height="6.9"  fill="#6b7180" opacity="0.7"/>
+  <text x="560" y="276" text-anchor="middle" font-size="11" font-weight="700" fill="currentColor">9.65M → 1.62 J</text>
+  <text x="560" y="345" text-anchor="middle" font-size="11" font-weight="700" fill="white">90%</text>
+
+  <!-- X labels -->
+  <g font-size="10" fill="currentColor" opacity="0.8" text-anchor="middle">
+    <text x="200" y="408">host-split</text>
+    <text x="380" y="408">+ on-fabric attention</text>
+    <text x="560" y="408">+ on-fabric FFN-glue</text>
+  </g>
+
+  <!-- Legend (bottom row) -->
+  <g font-size="10" fill="currentColor">
+    <rect x="92"  y="437" width="12" height="12" rx="2" fill="var(--primary, #94452b)" opacity="0.9"/><text x="109" y="447">ternary engine (fixed, 8.68M)</text>
+    <rect x="300" y="437" width="12" height="12" rx="2" fill="var(--error, #a64542)" opacity="0.82"/><text x="317" y="447">attention glue</text>
+    <rect x="430" y="437" width="12" height="12" rx="2" fill="var(--primary, #94452b)" opacity="0.45"/><text x="447" y="447">FFN glue</text>
+    <rect x="535" y="437" width="12" height="12" rx="2" fill="#6b7180" opacity="0.7"/><text x="552" y="447">norms + RoPE</text>
+  </g>
+</svg>
+</div>
+<p style="text-align: center; font-style: italic; color: var(--on-surface-variant); font-size: 0.9rem; margin-top: -0.5rem;">The same three states as the headline figure, counted in cycles per layer instead of joules. The terracotta base — the ternary engine — never changes. What collapses is the glue on top: the red attention block (16.2M cycles, host-bound) all but vanishes when it moves to the fabric, then the FFN glue follows. By the third bar the engine is 90% of the layer, and only the thin grey sliver of norms and RoPE is left on the host.</p>
 
 ### Phase 9 — two accelerators on one board, cooperating
 
