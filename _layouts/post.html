@@ -142,8 +142,8 @@
     html.dark .theme-gif-light { display: none !important; }
     html.dark .theme-gif-dark { display: block !important; }
     .theme-gif-light, .theme-gif-dark { margin: 0 auto !important; border: none !important; }
-{% if page.lightbox %}
-    /* Click-to-enlarge lightbox (opt-in via `lightbox: true` front matter) */
+
+    /* Click-to-enlarge lightbox (site-wide for all posts) */
     .post-content img, .post-content svg { cursor: zoom-in; }
     .lightbox-overlay { position: fixed; inset: 0; z-index: 2000; display: none;
       align-items: center; justify-content: center; background: rgba(0,0,0,0.82); padding: 2rem; }
@@ -157,7 +157,6 @@
       font-size: 1.7rem; line-height: 1; color: #fff; background: rgba(0,0,0,0.4);
       border: 1px solid rgba(255,255,255,0.35); border-radius: 50%; cursor: pointer; z-index: 2001; }
     .lightbox-close:hover { background: rgba(0,0,0,0.65); }
-{% endif %}
   </style>
 </head>
 <body class="font-body">
@@ -286,7 +285,6 @@
 })();
 </script>
 
-{% if page.lightbox %}
 <div class="lightbox-overlay" id="lightbox"><button class="lightbox-close" aria-label="Close">&times;</button><div class="lightbox-content"></div></div>
 <script>
 (function() {
@@ -314,7 +312,6 @@
   });
 })();
 </script>
-{% endif %}
 
 </body>
 </html>
