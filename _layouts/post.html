@@ -136,10 +136,12 @@
 
     /* Theme-swapped GIFs: show only the variant matching the active theme.
        (Lives here, not in post markdown, so Kramdown can't mangle the rule.) */
-    .theme-gif-dark { display: none; }
-    html.dark .theme-gif-light { display: none; }
-    html.dark .theme-gif-dark { display: block; }
-    .theme-gif-light, .theme-gif-dark { margin: 0 !important; border: none !important; }
+    /* !important because the imgs carry an inline display:block that would otherwise win */
+    .theme-gif-light { display: block !important; }
+    .theme-gif-dark { display: none !important; }
+    html.dark .theme-gif-light { display: none !important; }
+    html.dark .theme-gif-dark { display: block !important; }
+    .theme-gif-light, .theme-gif-dark { margin: 0 auto !important; border: none !important; }
 {% if page.lightbox %}
     /* Click-to-enlarge lightbox (opt-in via `lightbox: true` front matter) */
     .post-content img, .post-content svg { cursor: zoom-in; }

@@ -3,7 +3,7 @@ layout: post
 title: "Training a Language Model on Machines That Keep Dying"
 date: 2026-06-13
 tags: [Distributed Training, Fault Tolerance, DiLoCo, torchft, LLM]
-cover_image: /assets/images/ft-diloco/beowulf-cluster.jpg
+cover_image: /assets/images/ft-diloco/cover.jpg
 lightbox: true
 ---
 
