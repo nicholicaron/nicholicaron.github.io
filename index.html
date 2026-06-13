@@ -23,7 +23,6 @@
     <!-- Desktop nav -->
     <div class="hidden md:flex items-center gap-8">
       <a href="#stack" class="nav-link font-label text-sm uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors duration-300" data-section="stack">Stack</a>
-      <a href="#experience" class="nav-link font-label text-sm uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors duration-300" data-section="experience">Experience</a>
       <a href="#projects" class="nav-link font-label text-sm uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors duration-300" data-section="projects">Projects</a>
       <a href="#writing" class="nav-link font-label text-sm uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors duration-300" data-section="writing">Writing</a>
       <a href="#about" class="nav-link font-label text-sm uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors duration-300" data-section="about">About</a>
@@ -56,7 +55,6 @@
       <span class="material-symbols-outlined text-3xl">close</span>
     </button>
     <a href="#stack" class="mobile-nav-link font-headline italic text-3xl text-on-background hover:text-primary transition-colors">Stack</a>
-    <a href="#experience" class="mobile-nav-link font-headline italic text-3xl text-on-background hover:text-primary transition-colors">Experience</a>
     <a href="#projects" class="mobile-nav-link font-headline italic text-3xl text-on-background hover:text-primary transition-colors">Projects</a>
     <a href="#writing" class="mobile-nav-link font-headline italic text-3xl text-on-background hover:text-primary transition-colors">Writing</a>
     <a href="#about" class="mobile-nav-link font-headline italic text-3xl text-on-background hover:text-primary transition-colors">About</a>
@@ -224,140 +222,6 @@
     </div>
   </section>
 
-  <!-- ============================================
-       EXPERIENCE
-       ============================================ -->
-  <section id="experience" class="mb-32 reveal">
-    <div class="editorial-grid">
-      <!-- Sidebar -->
-      <aside class="col-span-12 md:col-span-3 mb-12 md:mb-0">
-        <div class="sticky top-36">
-          <span class="font-label text-[10px] font-bold uppercase tracking-[0.3em] text-primary mb-4 block">Career</span>
-          <h2 class="font-headline text-4xl md:text-5xl text-on-background tracking-tight mb-12">Experience</h2>
-
-          <div class="hidden md:block p-8 bg-surface-container border-l-2 border-primary/30">
-            <p class="font-headline italic text-lg leading-relaxed text-on-surface">"The gap between research and deployment is where the interesting engineering happens."</p>
-            <p class="font-label text-[10px] uppercase tracking-widest mt-4 text-on-surface-variant opacity-60">&#8212; Operating philosophy</p>
-          </div>
-        </div>
-      </aside>
-
-      <!-- Timeline entries -->
-      <div class="col-span-12 md:col-span-8 md:col-start-5 space-y-16">
-
-        <!-- WM-Synergy -->
-        <article class="group">
-          <div class="flex flex-col md:flex-row gap-4 md:gap-8 items-baseline">
-            <time class="font-mono text-[11px] uppercase tracking-[0.15em] text-on-surface-variant shrink-0 md:w-32 opacity-60">May 2025 &mdash; Present</time>
-            <div class="flex-grow">
-              <span class="font-label text-[10px] uppercase tracking-[0.25em] text-primary font-bold mb-2 block">WM-Synergy</span>
-              <h3 class="font-headline text-2xl md:text-3xl text-on-background leading-snug tracking-tight mb-4">Data Scientist</h3>
-              <ul class="space-y-3 text-on-surface-variant font-body text-[15px] leading-relaxed mb-5">
-                <li class="flex gap-3"><span class="text-primary select-none shrink-0">&rsaquo;</span>Architected customer-facing AI agent using Claude API with three-stage RAG pipeline and confidence-based escalation via Zoho MCP</li>
-                <li class="flex gap-3"><span class="text-primary select-none shrink-0">&rsaquo;</span>Designed end-to-end OpenTelemetry observability pipeline on Azure for real-time AI agent auditing and compliance reporting</li>
-                <li class="flex gap-3"><span class="text-primary select-none shrink-0">&rsaquo;</span>Built sales-to-delivery platform with SharePoint ingestion and section-by-section RAG for automated project plan generation</li>
-              </ul>
-              <div class="flex flex-wrap gap-2">
-                <span class="bg-surface-container px-2.5 py-1 rounded-full font-mono text-[10px] text-on-surface-variant">Claude API</span>
-                <span class="bg-surface-container px-2.5 py-1 rounded-full font-mono text-[10px] text-on-surface-variant">RAG</span>
-                <span class="bg-surface-container px-2.5 py-1 rounded-full font-mono text-[10px] text-on-surface-variant">Azure</span>
-                <span class="bg-surface-container px-2.5 py-1 rounded-full font-mono text-[10px] text-on-surface-variant">OpenTelemetry</span>
-                <span class="bg-surface-container px-2.5 py-1 rounded-full font-mono text-[10px] text-on-surface-variant">MCP</span>
-              </div>
-            </div>
-          </div>
-        </article>
-
-        <!-- Neumann Labs -->
-        <article class="group">
-          <div class="flex flex-col md:flex-row gap-4 md:gap-8 items-baseline">
-            <time class="font-mono text-[11px] uppercase tracking-[0.15em] text-on-surface-variant shrink-0 md:w-32 opacity-60">Sep 2024 &mdash; May 2025</time>
-            <div class="flex-grow">
-              <span class="font-label text-[10px] uppercase tracking-[0.25em] text-primary font-bold mb-2 block">Neumann Labs</span>
-              <h3 class="font-headline text-2xl md:text-3xl text-on-background leading-snug tracking-tight mb-4">Founding Machine Learning Engineer</h3>
-              <ul class="space-y-3 text-on-surface-variant font-body text-[15px] leading-relaxed mb-5">
-                <li class="flex gap-3"><span class="text-primary select-none shrink-0">&rsaquo;</span>Built multi-agent orchestration harness coordinating LLM agents through human-supervised gated state machines</li>
-                <li class="flex gap-3"><span class="text-primary select-none shrink-0">&rsaquo;</span>Engineered reliability infra: circuit breakers, infinite loop detection, and agent restart with full state recovery</li>
-                <li class="flex gap-3"><span class="text-primary select-none shrink-0">&rsaquo;</span>Enforced resource isolation via cgroup v2 limits, container sandboxing, and tiered process monitoring</li>
-              </ul>
-              <div class="flex flex-wrap gap-2">
-                <span class="bg-surface-container px-2.5 py-1 rounded-full font-mono text-[10px] text-on-surface-variant">Multi-Agent Systems</span>
-                <span class="bg-surface-container px-2.5 py-1 rounded-full font-mono text-[10px] text-on-surface-variant">LLMs</span>
-                <span class="bg-surface-container px-2.5 py-1 rounded-full font-mono text-[10px] text-on-surface-variant">cgroups v2</span>
-                <span class="bg-surface-container px-2.5 py-1 rounded-full font-mono text-[10px] text-on-surface-variant">Docker</span>
-              </div>
-            </div>
-          </div>
-        </article>
-
-        <!-- Theta Informatics -->
-        <article class="group">
-          <div class="flex flex-col md:flex-row gap-4 md:gap-8 items-baseline">
-            <time class="font-mono text-[11px] uppercase tracking-[0.15em] text-on-surface-variant shrink-0 md:w-32 opacity-60">May 2024 &mdash; Sep 2024</time>
-            <div class="flex-grow">
-              <span class="font-label text-[10px] uppercase tracking-[0.25em] text-primary font-bold mb-2 block">Theta Informatics</span>
-              <h3 class="font-headline text-2xl md:text-3xl text-on-background leading-snug tracking-tight mb-4">Software Engineer (Machine Learning)</h3>
-              <ul class="space-y-3 text-on-surface-variant font-body text-[15px] leading-relaxed mb-5">
-                <li class="flex gap-3"><span class="text-primary select-none shrink-0">&rsaquo;</span>Trained object detection models and CI/CD automated retraining pipelines for deployment on commercial UAVs</li>
-                <li class="flex gap-3"><span class="text-primary select-none shrink-0">&rsaquo;</span>Implemented foundation model-powered active learning pipeline, reducing manual labeling time by 70%</li>
-              </ul>
-              <div class="flex flex-wrap gap-2">
-                <span class="bg-surface-container px-2.5 py-1 rounded-full font-mono text-[10px] text-on-surface-variant">Computer Vision</span>
-                <span class="bg-surface-container px-2.5 py-1 rounded-full font-mono text-[10px] text-on-surface-variant">CI/CD</span>
-                <span class="bg-surface-container px-2.5 py-1 rounded-full font-mono text-[10px] text-on-surface-variant">Active Learning</span>
-                <span class="bg-surface-container px-2.5 py-1 rounded-full font-mono text-[10px] text-on-surface-variant">UAVs</span>
-              </div>
-            </div>
-          </div>
-        </article>
-
-        <!-- KSU Research -->
-        <article class="group">
-          <div class="flex flex-col md:flex-row gap-4 md:gap-8 items-baseline">
-            <time class="font-mono text-[11px] uppercase tracking-[0.15em] text-on-surface-variant shrink-0 md:w-32 opacity-60">May 2023 &mdash; Jul 2023</time>
-            <div class="flex-grow">
-              <span class="font-label text-[10px] uppercase tracking-[0.25em] text-primary font-bold mb-2 block">Kennesaw State University</span>
-              <h3 class="font-headline text-2xl md:text-3xl text-on-background leading-snug tracking-tight mb-4">Machine Learning Researcher</h3>
-              <ul class="space-y-3 text-on-surface-variant font-body text-[15px] leading-relaxed mb-5">
-                <li class="flex gap-3"><span class="text-primary select-none shrink-0">&rsaquo;</span>Benchmarked Vision Transformer robustness to covariate shift and input perturbations, identifying failure modes</li>
-              </ul>
-              <div class="flex flex-wrap gap-2">
-                <span class="bg-surface-container px-2.5 py-1 rounded-full font-mono text-[10px] text-on-surface-variant">Vision Transformers</span>
-                <span class="bg-surface-container px-2.5 py-1 rounded-full font-mono text-[10px] text-on-surface-variant">PyTorch</span>
-              </div>
-            </div>
-          </div>
-        </article>
-
-        <!-- Education -->
-        <div class="border-t border-outline-variant/40 pt-16 space-y-12">
-          <span class="font-label text-[10px] font-bold uppercase tracking-[0.3em] text-on-surface-variant opacity-50 block">Education</span>
-
-          <article class="group">
-            <div class="flex flex-col md:flex-row gap-4 md:gap-8 items-baseline">
-              <time class="font-mono text-[11px] uppercase tracking-[0.15em] text-on-surface-variant shrink-0 md:w-32 opacity-60">Jan 2026 &mdash; Dec 2027</time>
-              <div class="flex-grow">
-                <span class="font-label text-[10px] uppercase tracking-[0.25em] text-[#7c3aed] font-bold mb-2 block">Georgia Institute of Technology</span>
-                <h3 class="font-headline text-2xl text-on-background leading-snug tracking-tight">M.S. Computer Science</h3>
-              </div>
-            </div>
-          </article>
-
-          <article class="group">
-            <div class="flex flex-col md:flex-row gap-4 md:gap-8 items-baseline">
-              <time class="font-mono text-[11px] uppercase tracking-[0.15em] text-on-surface-variant shrink-0 md:w-32 opacity-60">Aug 2018 &mdash; Dec 2024</time>
-              <div class="flex-grow">
-                <span class="font-label text-[10px] uppercase tracking-[0.25em] text-[#7c3aed] font-bold mb-2 block">Kennesaw State University</span>
-                <h3 class="font-headline text-2xl text-on-background leading-snug tracking-tight">B.S. Mathematics</h3>
-                <p class="font-body text-sm text-on-surface-variant mt-1">Concentration in Discrete Math & Operations Research</p>
-              </div>
-            </div>
-          </article>
-        </div>
-
-      </div>
-    </div>
-  </section>
 
   <!-- ============================================
        PROJECTS
@@ -386,22 +250,27 @@
         </a>
       </article>
 
-      <!-- BusyBee -->
+      <!-- ft-diloco -->
       <article class="group bg-surface-container-low p-8 md:p-10 border border-outline-variant/30 rounded hover:shadow-lg transition-all duration-300">
         <div class="flex items-center gap-3 mb-4">
-          <span class="material-symbols-outlined text-[#b45309] text-2xl">pest_control</span>
-          <span class="font-mono text-[10px] uppercase tracking-[0.2em] text-on-surface-variant opacity-60">Research</span>
+          <span class="material-symbols-outlined text-[#2f9e44] text-2xl">dns</span>
+          <span class="font-mono text-[10px] uppercase tracking-[0.2em] text-on-surface-variant opacity-60">Distributed Systems</span>
         </div>
-        <h3 class="font-headline text-2xl text-on-background group-hover:text-primary transition-colors tracking-tight mb-3">BusyBee</h3>
-        <p class="font-body text-[15px] text-on-surface-variant leading-relaxed mb-6">Object detection system for bee conservation. Engineered automated data pipeline for semi-supervised labeling, generating a novel dataset of 45K+ annotated images.</p>
+        <h3 class="font-headline text-2xl text-on-background group-hover:text-primary transition-colors tracking-tight mb-3">ft-diloco</h3>
+        <p class="font-body text-[15px] text-on-surface-variant leading-relaxed mb-6">Fault-tolerant DiLoCo: training a language model across cheap, unreliable machines that sync only rarely, via Meta's torchft. Kill, freeze, or disconnect machines mid-run and convergence survives &mdash; 32 replicas weathered 125 faults/hr at 97.7% of fault-free throughput.</p>
         <div class="flex flex-wrap gap-2 mb-6">
-          <span class="bg-surface-container px-2.5 py-1 rounded-full font-mono text-[10px] text-on-surface-variant">Computer Vision</span>
-          <span class="bg-surface-container px-2.5 py-1 rounded-full font-mono text-[10px] text-on-surface-variant">PyTorch</span>
-          <span class="bg-surface-container px-2.5 py-1 rounded-full font-mono text-[10px] text-on-surface-variant">45K+ Images</span>
+          <span class="bg-surface-container px-2.5 py-1 rounded-full font-mono text-[10px] text-on-surface-variant">Distributed Training</span>
+          <span class="bg-surface-container px-2.5 py-1 rounded-full font-mono text-[10px] text-on-surface-variant">torchft</span>
+          <span class="bg-surface-container px-2.5 py-1 rounded-full font-mono text-[10px] text-on-surface-variant">Fault Tolerance</span>
         </div>
-        <a href="https://huggingface.co/spaces/nicholicaron/BusyBee" target="_blank" rel="noopener" class="font-label text-[10px] font-bold uppercase tracking-widest text-on-background flex items-center gap-2 border-b border-transparent hover:border-primary w-fit pb-1 transition-all">
-          View Demo <span class="material-symbols-outlined text-[14px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
-        </a>
+        <div class="flex flex-wrap gap-x-6 gap-y-2 items-center">
+          <a href="/2026/06/13/training-a-language-model-on-machines-that-keep-dying.html" class="font-label text-[10px] font-bold uppercase tracking-widest text-on-background flex items-center gap-2 border-b border-transparent hover:border-primary w-fit pb-1 transition-all">
+            Read the Essay <span class="material-symbols-outlined text-[14px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+          </a>
+          <a href="https://github.com/Neumann-Labs/ft-diloco" target="_blank" rel="noopener" class="font-label text-[10px] font-bold uppercase tracking-widest text-on-surface-variant flex items-center gap-2 border-b border-transparent hover:border-on-background w-fit pb-1 transition-all">
+            GitHub <span class="material-symbols-outlined text-[14px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+          </a>
+        </div>
       </article>
 
       <!-- CHOP -->
@@ -427,22 +296,27 @@
         </div>
       </article>
 
-      <!-- Predictive Maintenance -->
+      <!-- ternfpga -->
       <article class="group bg-surface-container-low p-8 md:p-10 border border-outline-variant/30 rounded hover:shadow-lg transition-all duration-300">
         <div class="flex items-center gap-3 mb-4">
-          <span class="material-symbols-outlined text-[#0d9488] text-2xl">precision_manufacturing</span>
-          <span class="font-mono text-[10px] uppercase tracking-[0.2em] text-on-surface-variant opacity-60">Applied ML</span>
+          <span class="material-symbols-outlined text-[#b45309] text-2xl">developer_board</span>
+          <span class="font-mono text-[10px] uppercase tracking-[0.2em] text-on-surface-variant opacity-60">Hardware / ML Systems</span>
         </div>
-        <h3 class="font-headline text-2xl text-on-background group-hover:text-primary transition-colors tracking-tight mb-3">Predictive Maintenance</h3>
-        <p class="font-body text-[15px] text-on-surface-variant leading-relaxed mb-6">Aircraft engine failure forecasting using NASA CMAPSS dataset. Predicted failures 13 cycles in advance with 96% accuracy through feature engineering and Random Forest.</p>
+        <h3 class="font-headline text-2xl text-on-background group-hover:text-primary transition-colors tracking-tight mb-3">ternfpga</h3>
+        <p class="font-body text-[15px] text-on-surface-variant leading-relaxed mb-6">A multiply-free ternary LLM inference engine on a $130 FPGA, benchmarked head-to-head against an RTX 3060 in the same machine &mdash; the same decode at an estimated ~2.3&times; less energy per token, by refusing to multiply.</p>
         <div class="flex flex-wrap gap-2 mb-6">
-          <span class="bg-surface-container px-2.5 py-1 rounded-full font-mono text-[10px] text-on-surface-variant">Scikit-learn</span>
-          <span class="bg-surface-container px-2.5 py-1 rounded-full font-mono text-[10px] text-on-surface-variant">Random Forest</span>
-          <span class="bg-surface-container px-2.5 py-1 rounded-full font-mono text-[10px] text-on-surface-variant">96% Accuracy</span>
+          <span class="bg-surface-container px-2.5 py-1 rounded-full font-mono text-[10px] text-on-surface-variant">FPGA</span>
+          <span class="bg-surface-container px-2.5 py-1 rounded-full font-mono text-[10px] text-on-surface-variant">BitNet</span>
+          <span class="bg-surface-container px-2.5 py-1 rounded-full font-mono text-[10px] text-on-surface-variant">Energy Efficiency</span>
         </div>
-        <a href="https://github.com/nicholicaron" target="_blank" rel="noopener" class="font-label text-[10px] font-bold uppercase tracking-widest text-on-background flex items-center gap-2 border-b border-transparent hover:border-primary w-fit pb-1 transition-all">
-          View on GitHub <span class="material-symbols-outlined text-[14px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
-        </a>
+        <div class="flex flex-wrap gap-x-6 gap-y-2 items-center">
+          <a href="/2026/06/09/multiply-free-a-ternary-llm-engine-on-a-130-fpga.html" class="font-label text-[10px] font-bold uppercase tracking-widest text-on-background flex items-center gap-2 border-b border-transparent hover:border-primary w-fit pb-1 transition-all">
+            Read the Essay <span class="material-symbols-outlined text-[14px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+          </a>
+          <a href="https://github.com/Neumann-Labs/ternfpga" target="_blank" rel="noopener" class="font-label text-[10px] font-bold uppercase tracking-widest text-on-surface-variant flex items-center gap-2 border-b border-transparent hover:border-on-background w-fit pb-1 transition-all">
+            GitHub <span class="material-symbols-outlined text-[14px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+          </a>
+        </div>
       </article>
 
     </div>
