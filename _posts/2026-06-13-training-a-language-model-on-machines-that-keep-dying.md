@@ -3,16 +3,16 @@ layout: post
 title: "Training a Language Model on Machines That Keep Dying"
 date: 2026-06-13
 tags: [Distributed Training, Fault Tolerance, DiLoCo, torchft, LLM]
-cover_image: /assets/images/ft-diloco/cover.png
+cover_image: /assets/images/ft-diloco/beowulf-cluster.jpg
+lightbox: true
 ---
 
-Thirty-two copies of a language model were training on a single desktop. Every twenty-nine seconds, on a schedule, something went wrong on purpose: a process `kill -9`'d out of existence, or frozen mid-step with a `SIGSTOP`, or cut off from the network entirely. Over half an hour, **twenty-seven of them were killed outright** — and partitioned, and stalled, sixty-two faults in all. Nobody touched a keyboard. At the end, the model's loss had fallen **10.8 → 4.3** in a clean monotonic descent, and the cluster had retained **97.7% of the throughput** it would have had if nothing ever broke.
+Thirty-two copies of a language model were training on a single sixteen-core box. Every twenty-nine seconds, on a schedule, something went wrong on purpose: a process `kill -9`'d out of existence, or frozen mid-step with a `SIGSTOP`, or cut off from the network entirely. Over half an hour, **twenty-seven of them were killed outright** — and partitioned, and stalled, sixty-two faults in all. Nobody touched a keyboard. At the end, the model's loss had fallen **10.8 → 4.3** in a clean monotonic descent, and the cluster had retained **97.7% of the throughput** it would have had if nothing ever broke.
 
 <div style="margin: 2rem 0; padding: 0.75rem; background: var(--surface-container); border: 1px solid var(--outline-variant); border-radius: 0.5rem;">
-<img class="ftd-gif ftd-gif-light" src="/assets/images/ft-diloco/storm_light.gif" alt="A 32-cell grid of replicas changing color as faults hit, with live quorum and loss charts, reconstructed from telemetry" style="max-width:100%; display:block; margin:0 auto; border-radius:0.25rem;">
-<img class="ftd-gif ftd-gif-dark" src="/assets/images/ft-diloco/storm_dark.gif" alt="A 32-cell grid of replicas changing color as faults hit, with live quorum and loss charts, reconstructed from telemetry" style="max-width:100%; display:block; margin:0 auto; border-radius:0.25rem;">
+<img class="theme-gif-light" src="/assets/images/ft-diloco/storm_light.gif" alt="A 32-cell grid of replicas changing color as faults hit, with live quorum and loss charts, reconstructed from telemetry" style="max-width:100%; display:block; margin:0 auto; border-radius:0.25rem;">
+<img class="theme-gif-dark" src="/assets/images/ft-diloco/storm_dark.gif" alt="A 32-cell grid of replicas changing color as faults hit, with live quorum and loss charts, reconstructed from telemetry" style="max-width:100%; display:block; margin:0 auto; border-radius:0.25rem;">
 </div>
-<style>.ftd-gif-dark{display:none} html.dark .ftd-gif-light{display:none} html.dark .ftd-gif-dark{display:block}</style>
 <p style="text-align: center; font-style: italic; color: var(--on-surface-variant); font-size: 0.9rem; margin-top: -0.5rem;">The whole project in twenty-six seconds. Each cell is one of 32 replica groups, colored by what it's doing — training, committing a sync, killed, frozen, partitioned, or healing back from a peer. The left chart tracks the live quorum, the right chart the eval loss, and the red ticks mark every kill. Thirty minutes of real wall-clock is compressed here; the animation isn't a screen recording but a reconstruction from the timestamped JSONL each replica wrote, which is why the time axis and the encoding are mine to choose. The thing to watch is that the chaos on the grid never stops the loss on the right from falling. (This figure ships in two renders — one tuned for each — and swaps with the light/dark toggle at the top of the page.)</p>
 
 That this works at all is the easy part of the story, and it isn't mine — it's [DiLoCo](https://arxiv.org/abs/2311.08105) and Meta's [torchft](https://github.com/meta-pytorch/torchft). The interesting part is what you have to discover to make it work *honestly*. torchft's headline result is fault tolerance at the scale you'd expect it: ~300 production GPUs, a real training job, machines failing about once a minute. The question that started this project was smaller and more suspicious — **does any of that survive on the kind of hardware you'd actually scrounge?** A gaming GPU, a couple of old boxes, a home network you can throttle to a crawl.
@@ -22,7 +22,7 @@ The answer is yes, but the yes comes with two distinctions I didn't have words f
 - **Connectivity ≠ coordination.** Two machines that can reach each other are not therefore training together. I watched a "cluster" silently dissolve into independent solo runs while every node reported perfect health.
 - **Liveness ≠ participation.** At scale, "alive" and "contributing to this sync" are different numbers, and the gap between them is a real, measurable tax that no dashboard was showing me.
 
-This is the build log of getting there — across six milestones, on a Ryzen desktop and an 8-core box and about three dollars of rented cloud — including the run where the loss *regressed* while every throughput metric looked perfect, which is the actual research finding buried in here.
+This is the build log of getting there — across six milestones, on a 16-core Ryzen box, an 8-core machine, and about three dollars of rented cloud — including the run where the loss *regressed* while every throughput metric looked perfect, which is the actual research finding buried in here.
 
 I'll be disciplined about provenance, because distributed-systems claims oversell as easily as benchmark numbers. Every load-bearing figure below is tagged: **measured** (read directly from a run's telemetry), **derived** (composed from measured primitives), or **single-run** (a one-shot result I haven't repeated — the cloud experiments, mostly). There's a full ledger near the end. The animation above, and every chart in this post, is reconstructed from the JSONL each run wrote — the timestamps are the ground truth.
 
@@ -48,56 +48,60 @@ This is why "distributed training" is a synonym for "expensive interconnect." Sy
 DiLoCo's move is to relax *when* you synchronize, not just how much. Each worker trains entirely on its own for **H steps** — a hundred, five hundred — using a normal inner optimizer (AdamW). Only then do the workers compare notes, and what they exchange isn't a per-step gradient but a **pseudo-gradient**: the total drift of each worker's parameters over those H steps. A second, *outer* optimizer (Nesterov-momentum SGD) treats that averaged drift as a single gradient and takes one big step. Then everyone broadcasts the updated weights and runs another H steps alone.
 
 <div style="overflow-x: auto; margin: 2rem 0;">
-<svg viewBox="0 0 780 320" xmlns="http://www.w3.org/2000/svg" style="font-family:'Inter',sans-serif; max-width:100%; display:block; margin:0 auto; height:auto;">
+<svg viewBox="0 0 840 400" xmlns="http://www.w3.org/2000/svg" style="font-family:'Inter',sans-serif; max-width:100%; display:block; margin:0 auto; height:auto;">
   <defs>
     <marker id="ah1" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto" markerUnits="userSpaceOnUse">
       <path d="M0,0 L7,3 L0,6 Z" fill="var(--primary,#94452b)"/>
     </marker>
   </defs>
-  <!-- inner loop boxes -->
-  <g>
-    <rect x="32" y="44" width="246" height="74" rx="8" fill="var(--primary-container,#fceee9)" stroke="var(--primary,#94452b)" stroke-width="1.3"/>
-    <text x="46" y="66" font-size="12.5" font-weight="600" fill="currentColor">Replica A — inner loop</text>
-    <text x="46" y="84" font-size="10.5" fill="currentColor" opacity="0.65">AdamW, H steps, fully local (no network)</text>
-    <g fill="var(--primary,#94452b)">
-      <circle cx="52" cy="104" r="3"/><circle cx="70" cy="104" r="3"/><circle cx="88" cy="104" r="3"/><circle cx="106" cy="104" r="3"/><circle cx="124" cy="104" r="3"/><circle cx="142" cy="104" r="3"/><circle cx="160" cy="104" r="3"/>
-    </g>
-    <text x="178" y="108" font-size="10.5" fill="currentColor" opacity="0.6">… ×H</text>
 
-    <rect x="32" y="200" width="246" height="74" rx="8" fill="var(--primary-container,#fceee9)" stroke="var(--primary,#94452b)" stroke-width="1.3"/>
-    <text x="46" y="222" font-size="12.5" font-weight="600" fill="currentColor">Replica B — inner loop</text>
-    <text x="46" y="240" font-size="10.5" fill="currentColor" opacity="0.65">AdamW, H steps, fully local (no network)</text>
-    <g fill="var(--primary,#94452b)">
-      <circle cx="52" cy="260" r="3"/><circle cx="70" cy="260" r="3"/><circle cx="88" cy="260" r="3"/><circle cx="106" cy="260" r="3"/><circle cx="124" cy="260" r="3"/><circle cx="142" cy="260" r="3"/><circle cx="160" cy="260" r="3"/>
-    </g>
-    <text x="178" y="264" font-size="10.5" fill="currentColor" opacity="0.6">… ×H</text>
+  <!-- Replica A inner loop -->
+  <rect x="44" y="58" width="256" height="80" rx="8" fill="var(--primary-container,#fceee9)" stroke="var(--primary,#94452b)" stroke-width="1.3"/>
+  <text x="60" y="84" font-size="12.5" font-weight="600" fill="currentColor">Replica A — inner loop</text>
+  <text x="60" y="102" font-size="10.5" fill="currentColor" opacity="0.65">AdamW × H steps, fully local (no network)</text>
+  <g fill="var(--primary,#94452b)">
+    <circle cx="64" cy="121" r="3"/><circle cx="83" cy="121" r="3"/><circle cx="102" cy="121" r="3"/><circle cx="121" cy="121" r="3"/><circle cx="140" cy="121" r="3"/><circle cx="159" cy="121" r="3"/><circle cx="178" cy="121" r="3"/>
   </g>
-  <!-- pseudo-gradient arrows to the average -->
-  <path d="M278,80 C320,80 330,140 372,150" fill="none" stroke="currentColor" stroke-width="1.4" opacity="0.7" marker-end="url(#ah1)"/>
-  <path d="M278,238 C320,238 330,176 372,166" fill="none" stroke="currentColor" stroke-width="1.4" opacity="0.7" marker-end="url(#ah1)"/>
-  <text x="300" y="74" font-size="10.5" fill="var(--primary,#94452b)" font-weight="600">Δ&#8202;A</text>
-  <text x="300" y="252" font-size="10.5" fill="var(--primary,#94452b)" font-weight="600">Δ&#8202;B</text>
-  <text x="312" y="128" font-size="9.5" fill="currentColor" opacity="0.6" text-anchor="middle">pseudo-grad</text>
-  <text x="312" y="140" font-size="9.5" fill="currentColor" opacity="0.6" text-anchor="middle">Δ = θ&#8320; − θ&#8336;</text>
-  <!-- average box -->
-  <rect x="382" y="128" width="118" height="62" rx="8" fill="var(--surface-container,#f3f0eb)" stroke="currentColor" stroke-width="1" stroke-opacity="0.5"/>
-  <text x="441" y="153" font-size="11.5" font-weight="600" fill="currentColor" text-anchor="middle">all-reduce</text>
-  <text x="441" y="170" font-size="10" fill="currentColor" text-anchor="middle" opacity="0.65">average the Δ's</text>
-  <text x="441" y="183" font-size="9" fill="currentColor" text-anchor="middle" opacity="0.5">(once per H steps)</text>
+  <text x="196" y="125" font-size="10.5" fill="currentColor" opacity="0.6">… ×H</text>
+
+  <!-- Replica B inner loop -->
+  <rect x="44" y="226" width="256" height="80" rx="8" fill="var(--primary-container,#fceee9)" stroke="var(--primary,#94452b)" stroke-width="1.3"/>
+  <text x="60" y="252" font-size="12.5" font-weight="600" fill="currentColor">Replica B — inner loop</text>
+  <text x="60" y="270" font-size="10.5" fill="currentColor" opacity="0.65">AdamW × H steps, fully local (no network)</text>
+  <g fill="var(--primary,#94452b)">
+    <circle cx="64" cy="289" r="3"/><circle cx="83" cy="289" r="3"/><circle cx="102" cy="289" r="3"/><circle cx="121" cy="289" r="3"/><circle cx="140" cy="289" r="3"/><circle cx="159" cy="289" r="3"/><circle cx="178" cy="289" r="3"/>
+  </g>
+  <text x="196" y="293" font-size="10.5" fill="currentColor" opacity="0.6">… ×H</text>
+
+  <!-- pseudo-gradient arrows into the all-reduce -->
+  <text x="318" y="96" font-size="11" font-weight="600" fill="var(--primary,#94452b)">Δ&#8201;A</text>
+  <text x="318" y="284" font-size="11" font-weight="600" fill="var(--primary,#94452b)">Δ&#8201;B</text>
+  <path d="M300,100 C360,100 384,158 430,168" fill="none" stroke="currentColor" stroke-width="1.4" opacity="0.7" marker-end="url(#ah1)"/>
+  <path d="M300,264 C360,264 384,196 430,186" fill="none" stroke="currentColor" stroke-width="1.4" opacity="0.7" marker-end="url(#ah1)"/>
+  <text x="372" y="126" font-size="9.5" fill="currentColor" opacity="0.62" text-anchor="middle">the pseudo-gradient Δ</text>
+  <text x="372" y="138" font-size="9.5" fill="currentColor" opacity="0.62" text-anchor="middle">(each replica's drift over H steps)</text>
+
+  <!-- all-reduce box -->
+  <rect x="438" y="150" width="118" height="64" rx="8" fill="var(--surface-container,#f3f0eb)" stroke="currentColor" stroke-width="1" stroke-opacity="0.5"/>
+  <text x="497" y="175" font-size="11.5" font-weight="600" fill="currentColor" text-anchor="middle">all-reduce</text>
+  <text x="497" y="192" font-size="10" fill="currentColor" text-anchor="middle" opacity="0.7">average the Δ's</text>
+  <text x="497" y="205" font-size="9" fill="currentColor" text-anchor="middle" opacity="0.5">once per H steps</text>
+
   <!-- outer step box -->
-  <path d="M500,159 L520,159" fill="none" stroke="currentColor" stroke-width="1.4" opacity="0.7" marker-end="url(#ah1)"/>
-  <rect x="524" y="128" width="132" height="62" rx="8" fill="var(--primary-container,#fceee9)" stroke="var(--primary,#94452b)" stroke-width="1.3"/>
-  <text x="590" y="151" font-size="11.5" font-weight="600" fill="currentColor" text-anchor="middle">outer step</text>
-  <text x="590" y="168" font-size="10" fill="currentColor" text-anchor="middle" opacity="0.7">Nesterov SGD</text>
-  <text x="590" y="181" font-size="9" fill="currentColor" text-anchor="middle" opacity="0.5">on the averaged Δ</text>
-  <!-- broadcast loop back -->
-  <path d="M656,170 C710,178 716,295 360,295 L150,295 C70,295 56,290 56,200 L56,196"
-        fill="none" stroke="var(--primary,#94452b)" stroke-width="1.4" stroke-dasharray="5 3" marker-end="url(#ah1)" opacity="0.85"/>
-  <path d="M56,118 L56,124" fill="none" stroke="var(--primary,#94452b)" stroke-width="1.4" stroke-dasharray="5 3" marker-end="url(#ah1)" opacity="0.85"/>
-  <text x="430" y="289" font-size="10.5" fill="var(--primary,#94452b)" text-anchor="middle" font-weight="600">broadcast updated params θ, repeat</text>
-  <!-- headline annotation -->
-  <text x="700" y="120" font-size="10.5" fill="currentColor" opacity="0.6" text-anchor="end">~H× less traffic than</text>
-  <text x="700" y="133" font-size="10.5" fill="currentColor" opacity="0.6" text-anchor="end">syncing every step</text>
+  <path d="M556,182 L582,182" fill="none" stroke="currentColor" stroke-width="1.4" opacity="0.7" marker-end="url(#ah1)"/>
+  <rect x="586" y="150" width="150" height="64" rx="8" fill="var(--primary-container,#fceee9)" stroke="var(--primary,#94452b)" stroke-width="1.3"/>
+  <text x="661" y="174" font-size="11.5" font-weight="600" fill="currentColor" text-anchor="middle">outer step</text>
+  <text x="661" y="191" font-size="10" fill="currentColor" text-anchor="middle" opacity="0.7">Nesterov SGD</text>
+  <text x="661" y="204" font-size="9" fill="currentColor" text-anchor="middle" opacity="0.5">on the averaged Δ</text>
+
+  <!-- headline annotation, clear top-right -->
+  <text x="800" y="92" font-size="10.5" fill="currentColor" opacity="0.6" text-anchor="end">~H× less network traffic</text>
+  <text x="800" y="106" font-size="10.5" fill="currentColor" opacity="0.6" text-anchor="end">than syncing every step</text>
+
+  <!-- broadcast loop: outer step → around the bottom → back into both replicas' left edge -->
+  <path d="M661,214 L661,366 L32,366 L32,98 L40,98" fill="none" stroke="var(--primary,#94452b)" stroke-width="1.4" stroke-dasharray="5 3" opacity="0.85" marker-end="url(#ah1)"/>
+  <path d="M32,266 L40,266" fill="none" stroke="var(--primary,#94452b)" stroke-width="1.4" stroke-dasharray="5 3" opacity="0.85" marker-end="url(#ah1)"/>
+  <text x="350" y="360" font-size="11" font-weight="600" fill="var(--primary,#94452b)" text-anchor="middle">broadcast the updated params θ — repeat</text>
 </svg>
 </div>
 <p style="text-align: center; font-style: italic; color: var(--on-surface-variant); font-size: 0.9rem; margin-top: -0.5rem;">The DiLoCo loop. Each replica runs H inner AdamW steps with no communication at all, then the replicas exchange one number per parameter — the pseudo-gradient Δ, the drift over those H steps — average it, and the outer Nesterov optimizer takes a single step on that average before broadcasting the new weights. The communication that data-parallel training does every step happens here once every H steps, so the wire traffic drops by roughly a factor of H. The price is that the workers diverge for H steps before being pulled back together, and the quality of the final model depends on H and the outer learning rate. That this trade is *smooth* — that you can dial H up and watch quality degrade gracefully — is what makes it a knob rather than a cliff, and Part II measures exactly where it bends.</p>
@@ -319,9 +323,9 @@ Both storms cleared 85% — above torchft's large-scale bar, at higher fault rat
   <text x="738.0" y="364.0" font-size="11" fill="currentColor" text-anchor="middle" opacity="0.7" font-weight="400">47</text>
   <text x="401.0" y="390.0" font-size="12" fill="currentColor" text-anchor="middle" opacity="0.8" font-weight="400">storm time (min)</text>
   <polyline points="112.6,92.7 167.4,186.5 202.8,229.5 223.5,243.6 332.3,133.8 360.2,182.5 406.2,99.9 448.0,195.4 478.6,226.3 504.1,236.3 550.0,57.1 601.9,185.5 601.9,185.5 634.6,225.1 720.4,100.2 737.8,132.0" fill="none" stroke="var(--error,#a64542)" stroke-width="2.4" opacity="1.0" stroke-linejoin="round" stroke-linecap="round"/>
-  <polyline points="112.8,92.5 125.2,92.5 152.2,92.5 167.6,186.5 203.1,229.7 224.0,243.8 249.5,236.7 263.9,257.5 284.2,255.2 310.1,268.2 332.1,281.1 360.2,280.9 364.2,283.3 407.5,293.4 417.4,295.2 422.8,288.7 469.5,300.2 469.5,300.2 513.5,302.4 516.4,297.5 538.8,302.4 554.4,299.6 558.9,297.3 601.7,300.7 626.1,306.1 633.6,302.5 634.0,301.7 667.9,307.9 682.1,303.7 694.3,307.9 735.0,309.1 738.0,299.2" fill="none" stroke="var(--primary,#94452b)" stroke-width="2.4" opacity="1.0" stroke-linejoin="round" stroke-linecap="round"/>
+  <polyline points="112.8,92.5 125.2,92.5 152.2,92.5 167.6,186.5 203.1,229.7 224.0,243.8 249.5,236.7 263.9,257.5 284.2,255.2 310.1,268.2 332.1,281.1 360.2,280.9 364.2,283.3 407.5,293.4 417.4,295.2 422.8,288.7 469.5,300.2 469.5,300.2 513.5,302.4 516.4,297.5 538.8,302.4 554.4,299.6 558.9,297.3 601.7,300.7 626.1,306.1 633.6,302.5 634.0,301.7 667.9,307.9 682.1,303.7 694.3,307.9 735.0,309.1 738.0,299.2" fill="none" stroke="#2f9e44" stroke-width="2.6" opacity="1.0" stroke-linejoin="round" stroke-linecap="round"/>
   <text x="737.8" y="124.0" font-size="11" fill="var(--error,#a64542)" text-anchor="end" opacity="1" font-weight="600">no checkpoints: regresses</text>
-  <text x="738.0" y="315.2" font-size="11" fill="var(--primary,#94452b)" text-anchor="end" opacity="1" font-weight="600">commit-coupled checkpoints: holds</text>
+  <text x="738.0" y="315.2" font-size="11" fill="#2f9e44" text-anchor="end" opacity="1" font-weight="600">commit-coupled checkpoints: holds</text>
 </svg>
 </div>
 <p style="text-align: center; font-style: italic; color: var(--on-surface-variant); font-size: 0.9rem; margin-top: -0.5rem;">The most important figure in this post, and the one I almost didn't make. The red curve is the eval loss during a storm where throughput read a healthy 87% the entire time — and the model is getting *worse*, oscillating up toward 4.0 after having reached 2.4. The system was committing syncs at a great rate; the syncs were poisoning the model. The mechanism is subtle and specific to small replica counts: a kill landing while the only other member is alive-but-not-yet-healed leaves a freshly-restarted worker as a one-member quorum, and that worker's near-random initial weights silently *become* the cluster's official state — I caught the survivors healing from a donor at step zero. Live peer-to-peer recovery, the thing M0.5 proved works, is necessary but not sufficient under restart churn. The brown curve is the same storm after the fix: each replica also persists state every few commits, so a wiped quorum resumes from durable ground truth instead of from noise, and a kill is only ever injected when a *healthy* donor exists. The loss descends and holds. Throughput was never the thing to watch.</p>
@@ -436,9 +440,9 @@ Then I rented a GPU. A home RTX 3060 and a Virginia RTX 4090, joined over a Tail
 
 This is the one that changed how I think about the whole problem. With the minimum quorum size set to one, two healthy, fully-connected nodes that hit their sync boundaries at different wall-clock times each commit *alone*, and the "cluster" quietly becomes two independent solo runs converging to different models — while every health check stays green. **Connectivity is not coordination.** The fix is a real barrier (require at least two participants per sync), but a barrier forces fast nodes to wait for slow ones, and that cost is exactly what the last milestone had to confront at scale.
 
-### M5 — 32 replicas, one desktop, and "liveness ≠ participation"
+### M5 — 32 replicas, one box, and "liveness ≠ participation"
 
-torchft's framing is ~30 replica groups. I wanted to match that scale — but the unknowns at N = 32 weren't about geography, which M4 had already settled; they were about *coordination*. Does the lighthouse stay sane managing 32 members? Does a 32-way all-reduce form and commit? Does the barrier from M4 hold without falling over? Every one of those questions answers on a single machine, for **\$0**, with chaos I control precisely and no cloud nodes to herd. So M5 ran 32 replica groups as CPU processes on one Ryzen desktop, each in its own network namespace, with a 3.3M-parameter model — small because thirty-two full models don't fit commodity RAM, and the storm exercises the coordination machinery, which doesn't care how big the model is.
+torchft's framing is ~30 replica groups. I wanted to match that scale — but the unknowns at N = 32 weren't about geography, which M4 had already settled; they were about *coordination*. Does the lighthouse stay sane managing 32 members? Does a 32-way all-reduce form and commit? Does the barrier from M4 hold without falling over? Every one of those questions answers on a single machine, for **\$0**, with chaos I control precisely and no cloud nodes to herd. So M5 ran 32 replica groups as CPU processes on a single 16-core Ryzen box, each in its own network namespace, with a 3.3M-parameter model — small because thirty-two full models don't fit commodity RAM, and the storm exercises the coordination machinery, which doesn't care how big the model is.
 
 I built up to it on a de-risk ladder — N = 4, then 8, then 32 — and it paid for itself immediately. The "barrier OOM" that had spooked me in M4 turned out to be an artifact: orphaned processes from repeated dirty relaunches piling up on a machine I hadn't cleaned, not a real limit. On a clean box the barrier runs in about 6 GB. The lighthouse coordinated all 32 managers without complaint. The ring formed and committed. So far, so good — and then the median quorum came back at **16 of 32**, and stayed there even with no faults at all.
 
@@ -582,7 +586,7 @@ In rough order of value:
 
 - **An alignment mechanism for the participation gap.** A short quorum-gather window, or re-phasing replicas' sync boundaries after a reconfiguration, so churn stops scattering them out of step. This is the direct lever on the ~16/32 number, and it's the most interesting open problem the project surfaced.
 - **Quantized or streamed syncs, against the 10 Mbps cliff.** The control-plane starvation that kills the cluster at 10 Mbps is a bandwidth problem with a known shape: shrink the pseudo-gradient payload (it's full fp32 today) or stream it in fragments so heartbeats can interleave. The reward is collaborative training over genuinely bad links.
-- **Larger N on real multi-host hardware.** M5's 32 replicas shared one desktop's cores, which is what produced the oversubscription story. The same harness across several physical machines would separate the coordination findings from the scheduling artifact and push toward torchft's actual scale.
+- **Larger N on real multi-host hardware.** M5's 32 replicas shared one machine's sixteen cores, which is what produced the oversubscription story. The same harness across several physical machines would separate the coordination findings from the scheduling artifact and push toward torchft's actual scale.
 - **The torchft friction, upstream.** The address-binding bug, the quorum-timeout default, the standalone-setup gap — written up as issues and, where I have a clean fix, pull requests. After this post, and as questions first.
 - **Independent reproduction.** The repo is built for it — every run writes the JSONL these figures are reconstructed from, and the de-risk ladder is scripted. The real bar is someone else killing their own nodes and reading the same recovered digests.
 

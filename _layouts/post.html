@@ -133,6 +133,29 @@
       --table-border: var(--outline-variant);
       --hr-color: var(--outline-variant);
     }
+
+    /* Theme-swapped GIFs: show only the variant matching the active theme.
+       (Lives here, not in post markdown, so Kramdown can't mangle the rule.) */
+    .theme-gif-dark { display: none; }
+    html.dark .theme-gif-light { display: none; }
+    html.dark .theme-gif-dark { display: block; }
+    .theme-gif-light, .theme-gif-dark { margin: 0 !important; border: none !important; }
+{% if page.lightbox %}
+    /* Click-to-enlarge lightbox (opt-in via `lightbox: true` front matter) */
+    .post-content img, .post-content svg { cursor: zoom-in; }
+    .lightbox-overlay { position: fixed; inset: 0; z-index: 2000; display: none;
+      align-items: center; justify-content: center; background: rgba(0,0,0,0.82); padding: 2rem; }
+    .lightbox-overlay.open { display: flex; }
+    .lightbox-content { width: min(85vw, 1400px); max-height: 88vh; overflow: auto;
+      background: var(--surface); border: 1px solid var(--outline-variant);
+      border-radius: 0.5rem; padding: 1.75rem; box-shadow: 0 24px 64px rgba(0,0,0,0.45); }
+    .lightbox-content svg, .lightbox-content img { width: 100%; height: auto;
+      max-height: 82vh; margin: 0; border: none; display: block; cursor: default; }
+    .lightbox-close { position: fixed; top: 1.4rem; right: 1.8rem; width: 2.6rem; height: 2.6rem;
+      font-size: 1.7rem; line-height: 1; color: #fff; background: rgba(0,0,0,0.4);
+      border: 1px solid rgba(255,255,255,0.35); border-radius: 50%; cursor: pointer; z-index: 2001; }
+    .lightbox-close:hover { background: rgba(0,0,0,0.65); }
+{% endif %}
   </style>
 </head>
 <body class="font-body">
@@ -260,6 +283,36 @@
   });
 })();
 </script>
+
+{% if page.lightbox %}
+<div class="lightbox-overlay" id="lightbox"><button class="lightbox-close" aria-label="Close">&times;</button><div class="lightbox-content"></div></div>
+<script>
+(function() {
+  var pc = document.querySelector('.post-content');
+  var ov = document.getElementById('lightbox');
+  if (!pc || !ov) return;
+  var content = ov.querySelector('.lightbox-content');
+  function close() { ov.classList.remove('open'); content.innerHTML = ''; document.body.style.overflow = ''; }
+  function open(node) {
+    var clone = node.cloneNode(true);
+    clone.removeAttribute('width'); clone.removeAttribute('height');
+    content.innerHTML = ''; content.appendChild(clone);
+    ov.classList.add('open'); document.body.style.overflow = 'hidden';
+  }
+  pc.addEventListener('click', function(e) {
+    var fig = e.target.closest('svg, img');
+    if (!fig || !pc.contains(fig)) return;
+    e.preventDefault(); open(fig);
+  });
+  ov.addEventListener('click', function(e) {
+    if (e.target === ov || e.target.classList.contains('lightbox-close')) close();
+  });
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && ov.classList.contains('open')) close();
+  });
+})();
+</script>
+{% endif %}
 
 </body>
 </html>
